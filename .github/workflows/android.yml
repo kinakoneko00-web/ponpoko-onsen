@@ -48,6 +48,21 @@ jobs:
         run: npx cap sync android
       - name: Build debug APK
         run: cd android && ./gradlew assembleDebug --no-daemon --stacktrace
+      - name: Inspect APK
+        run: |
+          AAPT=$(ls -d $ANDROID_HOME/build-tools/*/ | sort -V | tail -1)aapt2
+          APK=android/app/build/outputs/apk/debug/app-debug.apk
+          B=$($AAPT dump badging $APK)
+          PKG=$(echo "$B" | grep -o "package: name='[^']*'" | cut -d"'" -f2)
+          TSDK=$(echo "$B" | grep -o "targetSdkVersion:'[0-9]*'" | cut -d"'" -f2)
+          VC=$(echo "$B" | grep -o "versionCode='[0-9]*'" | cut -d"'" -f2)
+          LABEL=$(echo "$B" | grep -o "application-label:'[^']*'" | cut -d"'" -f2)
+          M=$($AAPT dump xmltree $APK --file AndroidManifest.xml)
+          ADS=$(echo "$M" | grep -c "com.google.android.gms.ads.APPLICATION_ID" || true)
+          PORT=$(echo "$M" | grep -c "screenOrientation" || true)
+          ADID=$(echo "$M" | grep -c "com.google.android.gms.permission.AD_ID" || true)
+          SIZE=$(du -k $APK | cut -f1)
+          echo "::notice title=APK::package=$PKG label=$LABEL targetSdk=$TSDK versionCode=$VC admobAppId=$ADS portrait=$PORT adIdPermission=$ADID sizeKB=$SIZE"
       - uses: actions/upload-artifact@v4
         with:
           name: ponpoko-debug-apk-${{ github.run_number }}

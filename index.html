@@ -3646,6 +3646,7 @@ function renderSettings(){
     ${ADS.privacy?'<div class="sgrp"><p class="sh">広告</p><button class="srowbtn" data-adpriv="1">🛡 広告のプライバシー設定<span>›</span></button></div>':''}
     <div class="sgrp"><p class="sh">データ</p><button class="srowbtn danger ${delArm?'arm':''}" data-del="1">${delArm?'本当に消す？（もう一度タップ）':'🗑 セーブデータを消す'}<span>›</span></button></div>
     <p class="credit">BGM：<a href="https://peritune.com/" target="_blank" rel="noopener">PeriTune</a>「Michikusa」「Michikusa3」「Hanagoyomi2」「Shizima3」</p>
+    <p class="credit"><a href="https://kinakoneko00-web.github.io/ponpoko-onsen/privacy.html" target="_blank" rel="noopener">プライバシーポリシー</a></p>
     <button class="go" data-close="1">とじる</button>`;
   else if(cfgView==='rules') h=`<p class="rtitle">ルール説明</p><div class="rlist">${RULES.map((r,i)=>[r,i]).sort((x,y)=>x[0].at-y[0].at).map(([r,i])=>{const lock=r.at>open;return `<button class="srowbtn" data-rule="${i}" ${lock?'disabled':''}>${lock?`🔒 ステージ${r.at}で登場`:r.title}<span>›</span></button>`}).join('')}</div>
     <button class="go sub" data-cv="main">もどる</button>`;
