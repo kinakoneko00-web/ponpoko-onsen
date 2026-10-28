@@ -1,6 +1,4 @@
-<!doctype html>
-<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cut"><title>ぽんぽこ温泉宿</title></head><body>
-<title>ぽんぽこ温泉宿</title>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cut"><title>ぽんぽこ温泉宿</title></head><body><title>ぽんぽこ温泉宿</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Kaisei+Decol:wght@700&family=Zen+Maru+Gothic:wght@500;700;900&family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap">
@@ -87,6 +85,9 @@ button:focus-visible{outline:3px solid var(--gold-l);outline-offset:2px}
 .inn .fightr{animation:blink .45s ease-in-out infinite alternate}
 .inn .chainr{filter:drop-shadow(0 0 6px #ffe08a)}
 @keyframes blink{to{opacity:.25}}
+svg .kwarn{animation:blink .5s steps(2) infinite alternate}
+.guest.melt{animation:melt .38s ease-in-out infinite alternate}
+@keyframes melt{from{filter:drop-shadow(0 0 0 #fff6c8) brightness(1)}to{filter:drop-shadow(0 0 7px #fff6c8) brightness(1.25);opacity:.7}}
 
 /* お客 */
 .guest{position:absolute;left:0;top:0;padding:0;border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:1px;z-index:3;touch-action:none;cursor:grab;
@@ -1473,7 +1474,7 @@ const TH={
   asa:{sky:['#8ec3ea','#f4d3d6','#fbe8c8'],sun:[.14,.3,'rgba(255,236,230,.9)','#fff4ee'],mtn:['#a3a9cf','#e3cfd4'],hill:['#6f8f58','#8fa868'],leaf:['#e07a7a','#e9a23b','#d8572a'],tree:['#4f7a4c','#5f8a54'],ground:['#a8c66a','#7a9e48'],cloud:'rgba(255,240,245,.85)',vig:.22}
 };
 // 難易度表：上手なプレイの売上・泊めた数を面ごとに測り、そこから割合で決めた目標（後半ほど割合が上がる）
-const TGT=[200,390,360,560,520,980,930,1030,1340,1410,1130,1630,1630,1670,1940,1870,1870,1930,2000,2230,1830,2020,2150,2130,2170,2110,2200,2090,2210,3920,2380,2510,2620,2540,2720,2710,2600,2540,2710,2870,2490,2620,2790,2670,2690,2750,2870,2710,2860,3190,3250,3300,3200,3360,3320,3090,3240,3290,3610,2690,2870,3990,3590,3820,3790,3770,3910,4020,3800,3870,4010,3900,4090,4240,4300,4310,4440,3780,4150,4340,4570,4370,3960,4000,4020,4300,4120,4250,4080,4920,3990,3940,4070,3890,4350,4540,3880,4040,4530,4300];
+const TGT=[200,390,360,560,520,920,970,940,1370,1460,1280,1660,1610,1710,1950,1890,1930,1990,1840,2270,1920,2060,2030,2010,2200,2120,2030,2130,2240,3830,2360,2620,2550,2560,2840,2680,2610,2580,2800,2950,2610,2680,2750,2830,2850,2840,2780,2770,2750,3090,3200,3200,3280,3290,3280,3400,3310,3200,3360,3280,2930,3810,3810,3620,3900,3910,3930,3820,3650,3750,4020,3900,4450,4180,4490,4130,4150,4110,4280,4340,3980,4090,4080,3910,3920,4370,3910,3960,4340,5100,4040,4400,4290,4450,4270,4200,4340,4180,4240,4380];
 const QTA=[4,5,7,8,8,8,7,8,9,9,9,8,9,9,9,10,9,10,9,10,9,9,9,9,10,9,9,9,9,12,10,11,12,11,11,12,11,12,11,12,13,12,12,12,13,13,11,13,13,12,12,13,12,12,13,12,13,14,13,8,13,13,13,13,14,13,13,14,14,15,14,15,14,14,13,14,14,13,14,14,14,14,14,14,13,13,15,15,15,13,14,13,11,13,14,15,12,14,15,13], QTB=[4,5,6,6,9,9,8,8,7,8,9,9,9,8,9,9,9,8,8,8,10,9,9,8,9,10,9,9,9,10,10,11,11,10,11,11,11,11,12,12,12,13,11,12,11,11,12,12,11,13,11,12,12,13,12,13,12,12,13,7,12,12,13,13,12,13,12,13,14,13,13,13,13,13,13,13,13,13,13,14,12,13,12,12,14,14,13,14,12,13,13,12,14,12,12,13,13,11,13,13];
 // 面ごとの「入っているルール」：登場したルールはすべて入る（開店前のカードに一覧を表示）
 const MODS=['rabbit','req','foes','wish','ev','trait']; // 掛け軸は廃止
@@ -1553,7 +1554,7 @@ const RULES=[
   {k:'trait',at:22,title:'新しいお客：くせ者',art:'<use href="#tr-snore" x="8" y="18" width="32" height="32"/><use href="#tr-party" x="44" y="18" width="32" height="32"/><use href="#tr-quiet" x="80" y="18" width="32" height="32"/>',
    text:'<b>いびき</b>はとなりを×0.7、<b>宴会好き</b>はとなりと自分を×1.3、<b>静か好き</b>はひとりなら×2（だれかいると×0.5）。'},
   {k:'kouji',at:31,title:'第4章：工事中の部屋',art:'<rect x="30" y="8" width="60" height="52" rx="3" fill="#fbe2b0" stroke="#1d1630" stroke-width="2"/><rect x="34" y="28" width="52" height="10" fill="#ffcf3a" stroke="#1d1630" stroke-width="2"/><path d="M40 38 l6 -10 h5 l-6 10z M56 38 l6 -10 h5 l-6 10z M72 38 l6 -10 h5 l-6 10z" fill="#1d1630"/>',
-   text:'宿を改装中！ 空いている部屋のどこかが<b>工事中</b>になって使えないよ。工事の場所は<b>15秒ごとに移動</b>する。空き部屋をあてにしすぎないで。'},
+   text:'宿を改装中！ 空いている部屋のどこかが<b>工事中</b>になって使えないよ。工事の場所は<b>15秒ごとに移動</b>する。次に工事が入る部屋は、3秒前に<b>黄色い点線</b>で知らせるよ。'},
   {k:'oshi',at:41,title:'第5章：おしのびの客',art:'<use href="#dog" x="16" y="6" width="54" height="54"/><use href="#leaf" x="34" y="-2" width="22" height="22"/><path d="M70 34 h12" stroke="#1d1630" stroke-width="3"/><use href="#cat" x="70" y="6" width="54" height="54" opacity=".9"/>',
    text:'<b>葉っぱのマーク</b>のお客は、はじめから<b>化けてやってくる</b>おしのび客。見た目のとおりにケンカするけど、ノルマは<b>本当の組合</b>で数えるよ。'},
   {k:'fast',at:51,title:'第6章：せっかちな客',art:'<use href="#clock" x="44" y="10" width="34" height="34"/><text x="60" y="62" text-anchor="middle" font-size="12" font-weight="900" fill="#c0391e">お代×1.5</text>',
@@ -1561,7 +1562,7 @@ const RULES=[
   {k:'rain',at:61,title:'第7章：長雨の季節',art:'<rect x="30" y="16" width="60" height="44" rx="3" fill="#3d5f9a" stroke="#1d1630" stroke-width="2"/><path d="M44 8 q-3 5 0 7 q3 -2 0 -7Z M60 4 q-3 5 0 7 q3 -2 0 -7Z M76 8 q-3 5 0 7 q3 -2 0 -7Z" fill="#9fd4ff" stroke="#1e3a6a"/>',
    text:'雨の多い季節。<b>雨もり</b>が何度も起きて、そのあいだはその部屋が使えないよ。'},
   {k:'moon',at:71,title:'第8章：満月の夜',art:'<circle cx="60" cy="30" r="20" fill="#fff6c8" stroke="#1d1630" stroke-width="2"/><use href="#leaf" x="74" y="34" width="26" height="26"/>',
-   text:'満月の夜は、<b>化け術がしばらくするととける</b>。とけると本当の姿にもどるから、<b>となりの部屋</b>にも気をつけて化かそう。'}
+   text:'満月の夜は、<b>化け術がしばらくするととける</b>。とける少し前に<b>ゆらゆら光る</b>から、<b>となりの部屋</b>にも気をつけて化かそう。'}
 ];const EVN={catfes:'ねこ祭り',dogfes:'わんわん祭り',leak:'雨もり',party:'大宴会',raid:'山賊の襲撃',rush:'団体さま到着'};
 const EVD={catfes:'ねこのお客がたくさん来て、お代が2倍！',dogfes:'いぬのお客がたくさん来て、お代が2倍！',leak:'部屋がひとつ使えない！ 残りの部屋でやりくりしよう',
   party:'みんな一斉におねだり！ チップ2倍',raid:'山賊が一度に押し寄せる！',rush:'同じ湯札の団体さまが3組。いぬもねこも混ざってるから並べ方に注意！'};
@@ -1602,7 +1603,7 @@ let S, L={}, muted=false;
 function newGame(){ return {v:VER,scene:'title',day:0,total:0,history:[],sp:0,ups:[]}; }
 function startDay(){
   const D=DAYS[S.day];
-  Object.assign(S,{scene:'play',t:D.time,cr:0,sus:0,walls:D.walls||[],fus:[],fusT:{},holes:D.holes||[],closed:[],kT:0,fstock:D.fusuma||0,fmode:false,bstock:D.leaf||0,bmode:false,bT:25,cols:D.cols,floors:D.floors,rooms:D.cols*D.floors,nid:(S.nid||10),
+  Object.assign(S,{scene:'play',t:D.time,cr:0,sus:0,walls:D.walls||[],fus:[],fusT:{},holes:D.holes||[],closed:[],kNext:null,kT:0,fstock:D.fusuma||0,fmode:false,bstock:D.leaf||0,bmode:false,bT:25,cols:D.cols,floors:D.floors,rooms:D.cols*D.floors,nid:(S.nid||10),
     q:{A:[],B:[]},room:Array(D.cols*D.floors).fill(null),sel:null,spawnT:{A:.4,B:1.6},cd:3.2,paused:false,stat:{bake:0,fights:0,big:0,fusUsed:0,byF:{A:0,B:0},lostF:{A:0,B:0},served:0,lost:0,kicked:0,chain:0,wish:0,beat:0,stolen:0,serve:0,missed:0,idle:0},idleT:0,combo:0,lastServe:-99,
     foes:[],foeT:7,bossDone:false,atkT:1.5,pochiT:2,raidN:0,raidT:0,sp:S.sp||0,ev:null,leak:null,
     evQ:pickEvents(D),rtag:Array.from({length:D.cols*D.floors},()=>D.scroll?TAGS[Math.random()*3|0]:null)});
@@ -1660,6 +1661,7 @@ function preview(g,i){
     if(after<before-.01)harm=true; if(after>before+.01)help=true}
   return {fight,chain:runLen(i,room),wish:g.wish?wishOk(g,i):null,mult:payMult(g,i,room),harm,help,scroll:S.rtag[i]===g.tag};
 }
+const KWARN=3, MELT_WARN=5;
 const isOff=i=>i===S.leak||(S.holes||[]).includes(i)||(S.closed||[]).includes(i); // 雨もり・間取りの欠け
 const freeRoom=()=>S.room.some((x,i)=>!x&&!isOff(i));
 function findQ(id){for(const f of ['A','B']){const i=S.q[f].findIndex(s=>s.id===id);if(i>=0)return{f,i,g:S.q[f][i]}}return null}
@@ -1798,8 +1800,15 @@ function step(dt,speed=1){
   for(const g of [...S.q.A,...S.q.B,...S.room.filter(Boolean)]) if(g.disg&&g.dT!=null){ g.dT-=dt; if(g.dT<=0){ g.disg=false; g.dT=null; dirty=true; sfx('doron');
     const o=els.get(g.id); if(o){o.state=null; pop('化けがとけた！',o.x,o.y-o.h*.5,'doron')} } }
   // 工事中の部屋：空き部屋がふさがり、15秒ごとに場所が変わる
-  if(D.tw&&D.tw.kouji){ S.kT=(S.kT??0)-dt; if(S.kT<=0){ S.kT=15; const cand=[...Array(S.rooms).keys()].filter(i=>!S.room[i]&&!(S.holes||[]).includes(i)&&i!==S.leak);
+  if(D.tw&&D.tw.kouji){ const pk=Math.ceil(S.kT??0); S.kT=(S.kT??0)-dt;
+    const freeK=()=>[...Array(S.rooms).keys()].filter(i=>!S.room[i]&&!(S.holes||[]).includes(i)&&i!==S.leak);
+    // 3秒前に「次に工事が入る部屋」を予告して、置き場所を考えられるようにする
+    if(S.kT<=KWARN&&S.kT>0&&!S.kNext&&S.t<D.time-1){ const c=freeK().filter(i=>!(S.closed||[]).includes(i)); for(let k=c.length-1;k>0;k--){const j=Math.random()*(k+1)|0;[c[k],c[j]]=[c[j],c[k]]}
+      S.kNext=c.slice(0,D.tw.kouji); dirty=true; }
+    if(S.kNext&&Math.ceil(S.kT)!==pk) dirty=true;
+    if(S.kT<=0){ S.kT=15; const cand=freeK();
       for(let k=cand.length-1;k>0;k--){const j=Math.random()*(k+1)|0;[cand[k],cand[j]]=[cand[j],cand[k]]}
+      if(S.kNext){const pre=S.kNext.filter(i=>cand.includes(i)); cand.splice(0,cand.length,...pre,...cand.filter(i=>!pre.includes(i)))} S.kNext=null;
       S.closed=cand.slice(0,D.tw.kouji); dirty=true; if(S.t<D.time-1) sfx('kick'); } }
   // 迷っている人への助け：待合にお客がいて空き部屋があるのに置いていない時間
   { const waiting=S.q.A.length+S.q.B.length>0&&freeRoom();
@@ -1925,6 +1934,8 @@ function frame(){
   }
   for(const s of guests()){const o=els.get(s.id); if(!o) continue; o.bar.style.width=((1-s.left/s.leftMax)*100)+'%';
     if(o.rq&&s.req){const r=s.req.t/s.req.tMax;o.rqRing.style.strokeDashoffset=91.1*(1-r);o.rq.classList.toggle('late',r<.35)}}
+  // 満月：化け術がとける少し前からゆらゆらさせて知らせる
+  for(const s of [...S.q.A,...S.q.B,...guests()]){const o=els.get(s.id); if(o) o.el.classList.toggle('melt',!!(s.disg&&s.dT!=null&&s.dT<MELT_WARN))}
   for(const f of ['A','B']){
     const n=S.stat.byF[f], lf=S.stat.lostF[f], mx=LM();
     const nq=$('nq'+f); nq.innerHTML=D.endless?`<small>お泊り</small>${n}組`:`<small>お泊り</small>${n}/${normOf(D,f)}`; nq.classList.toggle('ok',!D.endless&&n>=normOf(D,f));
@@ -2142,6 +2153,9 @@ function drawInn(){
       s+=`<rect x="${rx}" y="${ry}" width="${rw}" height="${rh}" fill="#3a2216" opacity=".55"/><g stroke="#1d1630" stroke-width="2"><rect x="${rx+4}" y="${ry+rh*.42}" width="${rw-8}" height="${rh*.16}" fill="#ffcf3a"/></g>`;
       for(let x=rx+6;x<rx+rw-10;x+=16) s+=`<path d="M${x} ${ry+rh*.58} l8 ${-rh*.16} h6 l-8 ${rh*.16}z" fill="#1d1630"/>`;
       s+=`<text x="${mx}" y="${ry+rh*.32}" text-anchor="middle" font-family="Dela Gothic One, sans-serif" font-size="${k}" fill="#fff" stroke="#1d1630" stroke-width="3" paint-order="stroke">工事中</text>`; }
+    if(S&&S.kNext&&S.kNext.includes(i)&&!(S.closed||[]).includes(i)){ const k=Math.min(13,rh*.2,rw*.17);
+      s+=`<g class="kwarn"><rect x="${rx+2}" y="${ry+2}" width="${rw-4}" height="${rh-4}" fill="#ffcf3a" fill-opacity=".18" stroke="#ffcf3a" stroke-width="3" stroke-dasharray="7 5"/>
+        <text x="${mx}" y="${ry+rh*.34}" text-anchor="middle" font-family="Dela Gothic One, sans-serif" font-size="${k}" fill="#ffcf3a" stroke="#1d1630" stroke-width="3" paint-order="stroke">もうすぐ工事 ${Math.max(1,Math.ceil(S.kT))}</text></g>`; }
     if(S&&S.leak===i){
       s+=`<rect x="${rx}" y="${ry}" width="${rw}" height="${rh}" fill="#3d5f9a" opacity=".55"/>`;
       for(let d=0;d<4;d++){const dx=rx+rw*(.2+d*.2), dy=ry+rh*(.15+(d%2)*.25);s+=`<path d="M${dx} ${dy} q-3 5 0 7 q3 -2 0 -7 Z" fill="#9fd4ff" stroke="#1e3a6a" stroke-width=".8" class="drip"/>`}
@@ -2245,7 +2259,7 @@ function place(s,docked,x,y,present,mix){
   o.w=W;o.h=H;o.el.style.width=W+'px'; o.el.style.height=docked?'':H+'px'; if(!docked){o.el.style.setProperty('--qa',L.qW+'px');o.el.style.setProperty('--bs',Math.max(14,Math.min(22,Math.floor((L.rowH-31)/2)))+'px')}
   const full=!docked&&!freeRoom(), ri=docked?roomOf(s.id):-1, n=docked?runLen(ri):0;
   const inFight=docked&&fightPairs().some(([a,b])=>a===ri||b===ri);
-  o.el.className=`guest ${s.f} sp-${look(s)} ${s.type==='v'?'vip':''} ${docked?'docked':'queued'} ${full?'full':''} ${inFight?'kickable':''} ${S.sel===s.id?'sel':''} ${n>=3?'ch3':n===2?'ch2':''} ${press&&press.drag&&press.id===s.id?'lifted':''}`;
+  o.el.className=`guest ${s.f} sp-${look(s)} ${s.type==='v'?'vip':''} ${docked?'docked':'queued'} ${full?'full':''} ${inFight?'kickable':''} ${S.sel===s.id?'sel':''} ${n>=3?'ch3':n===2?'ch2':''} ${press&&press.drag&&press.id===s.id?'lifted':''} ${s.disg&&s.dT!=null&&s.dT<MELT_WARN?'melt':''}`;
   o.el.setAttribute('aria-label',`${AN[s.f]}の${TYPES[s.type].name}${s.tag?'・湯札'+TAGN[s.tag]:''}`+(s.disg?`（${AN[look(s)]}に化けている）`:'')+(docked?'（タップで移動）':'（タップで案内）'));
   const st=(docked?'d':'q')+(s.disg?'b':'');
   if(o.state!==st){
@@ -3219,11 +3233,11 @@ function hintsHTML(D){
   if(D.fusuma) h.push(`${FUSI}<span><b>ふすま ×${D.fusuma}</b>　20秒だけ壁を置ける</span>`);
   if(D.leaf) h.push(`<svg viewBox="0 0 40 40" aria-hidden="true"><use href="#leaf"/></svg><span><b>化け術 ×${D.leaf}</b>　いぬ⇄ねこに化かせる</span>`);
   const T=D.tw||{};
-  if(T.kouji) h.push(`${ICO('fight')}<span><b>工事中</b>の部屋が${T.kouji}つ（15秒ごとに移動）</span>`);
+  if(T.kouji) h.push(`${ICO('fight')}<span><b>工事中</b>の部屋が${T.kouji}つ（15秒ごとに移動。<b>黄色い点線</b>が次の工事場所）</span>`);
   if(T.oshi) h.push(`<svg viewBox="0 0 40 40" aria-hidden="true"><use href="#leaf"/></svg><span><b>おしのび客</b>（はじめから化けている）が来る</span>`);
   if(T.fast) h.push(`<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#clock"/></svg><span><b>せっかちな客</b>：待てる時間が短いけど<b>お代×1.5</b></span>`);
   if(T.rain) h.push(`<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-towel"/></svg><span><b>雨もり</b>が${D.n2}回起きる</span>`);
-  if(T.moon) h.push(`<svg viewBox="0 0 40 40" aria-hidden="true"><use href="#leaf"/></svg><span>満月：化け術は<b>${T.moon}秒</b>でとける</span>`);
+  if(T.moon) h.push(`<svg viewBox="0 0 40 40" aria-hidden="true"><use href="#leaf"/></svg><span>満月：化け術は<b>${T.moon}秒</b>でとける（とける前にゆらゆら光る）</span>`);
   if(T.rush) h.push(`${ICO('clock')}<span>試練：お客が<b>いつもより速く</b>来る</span>`);
   if(T.raid) h.push(`<svg viewBox="0 0 64 64" aria-hidden="true"><use href="#saru"/></svg><span>試練：<b>山賊がいつもの倍</b>やってくる</span>`);
   if(T.vip) h.push(`<svg viewBox="0 0 64 64" aria-hidden="true"><use href="#vip"/></svg><span>試練：<b>お大尽</b>がたくさん来る</span>`);
@@ -3532,5 +3546,3 @@ function start(data){
 window.claude?.hot?.snapshot?.(()=>({S}));
 window.claude?.hot?.ready ? window.claude.hot.ready(start) : start(window.claude?.hot?.data ?? {});
 </script>
-
-</body></html>
