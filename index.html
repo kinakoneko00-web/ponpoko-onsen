@@ -1,4 +1,4 @@
-<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cut"><title>ぽんぽこ温泉宿</title></head><body><title>ぽんぽこ温泉宿</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>ぽんぽこ温泉宿</title><meta name="description" content="たぬき女将ポン子の温泉宿で、いぬとねこをとなりにしないように泊めるパズル。全100ステージ・スマホでそのまま遊べます。"><meta property="og:type" content="website"><meta property="og:site_name" content="ぽんぽこ温泉宿"><meta property="og:title" content="ぽんぽこ温泉宿 ― となりにしたら、ケンカ！"><meta property="og:description" content="たぬき女将ポン子の温泉宿で、いぬとねこをとなりにしないように泊めるパズル。全100ステージ・スマホでそのまま遊べます。"><meta property="og:url" content="https://kinakoneko00-web.github.io/ponpoko-onsen/"><meta property="og:image" content="https://kinakoneko00-web.github.io/ponpoko-onsen/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"></head><body><title>ぽんぽこ温泉宿</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Kaisei+Decol:wght@700&family=Zen+Maru+Gothic:wght@500;700;900&family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap">
@@ -85,6 +85,39 @@ button:focus-visible{outline:3px solid var(--gold-l);outline-offset:2px}
 .inn .fightr{animation:blink .45s ease-in-out infinite alternate}
 .inn .chainr{filter:drop-shadow(0 0 6px #ffe08a)}
 @keyframes blink{to{opacity:.25}}
+
+/* ===== 第7版：ごほうび帳・着物・クリア演出 ===== */
+svg .kimono{fill:var(--kimono,#6a4c8c)} svg .hana{fill:var(--hana,#e5393e)}
+.modes .modeb2.wide{grid-column:1/-1;flex-direction:row;align-items:center;justify-content:space-between}
+.ach{width:100%;display:flex;flex-direction:column;gap:6px;max-height:44vh;overflow:auto;padding:2px}
+.achc{color:var(--ink);display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:10px;background:var(--cream);box-shadow:0 0 0 2px var(--navy);text-align:left}
+.achc .md{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:15px;background:#e7dcc6;color:#9a8e78;box-shadow:inset 0 0 0 2px #b9ab90}
+.achc.got .md{background:radial-gradient(circle at 35% 30%,#fff3b0,#e9b33a 60%,#b07a12);color:#5a3a06;box-shadow:inset 0 0 0 2px #7a4a12}
+.achc b{color:var(--ink);display:block;font-family:var(--f-wa);font-size:13.5px}.achc small{display:block;font-size:11.5px;color:var(--muted);font-weight:700}
+.achc .rw{display:block;font-size:11px;font-weight:800;color:var(--pop-o)}
+.achc:not(.got){opacity:.78}
+.kimonos{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%}
+.kim{position:relative;padding:4px 2px 6px;border:0;border-radius:10px;background:var(--cream);box-shadow:0 0 0 2px var(--navy);font-weight:800;font-size:12px;color:var(--ink)}
+.kim svg{width:56px;height:56px;display:block;margin:0 auto}
+.kim.on{box-shadow:0 0 0 3px var(--pop-o),0 0 0 5px var(--navy)}
+.kim:disabled{opacity:1}.kim:disabled svg{filter:grayscale(1) brightness(.6)}.kim:disabled::after{content:'？';position:absolute;inset:4px 0 auto;font-size:26px;color:#fff;text-shadow:0 0 0 #000,0 2px 0 #1d1630}
+.rline{display:flex;align-items:flex-end;gap:8px;width:100%;margin:6px 0 2px}
+.rline .rf{flex:none;width:52px;height:52px;border-radius:50%;background:#f6ead0;box-shadow:0 0 0 2px var(--navy);overflow:hidden}
+.rline .rf svg{width:100%;height:100%}
+.rline p{position:relative;flex:1;margin:0;padding:8px 11px;border-radius:12px;background:#fff;box-shadow:0 0 0 2px var(--navy);font-size:13px;font-weight:700;line-height:1.5;text-align:left;animation:rlin .45s .9s both}
+.rline p::before{content:'';position:absolute;left:-7px;bottom:12px;border:6px solid transparent;border-right-color:var(--navy);border-left:0}
+.rline p small{display:block;font-size:10.5px;color:var(--muted)}
+.rline.bad svg .worry{display:inline}.rline.bad svg .happy{display:none}
+@keyframes rlin{from{opacity:0;transform:translateY(6px) scale(.96)}}
+.chapclear{position:relative;margin:4px auto 2px;padding:6px 18px;border-radius:8px;background:linear-gradient(#fff3c8,#ffd76a);box-shadow:0 0 0 2.5px #7a4a12,0 3px 0 2.5px #7a4a12;font-family:var(--f-wa);font-size:15px;color:#5a3006;animation:stampin .5s 1.25s both}
+.chapclear small{display:block;font-family:inherit;font-size:11px;color:#8a5a16}
+@keyframes stampin{0%{opacity:0;transform:scale(2.2) rotate(-8deg)}70%{opacity:1;transform:scale(.94) rotate(1deg)}100%{transform:none}}
+.achh{margin:8px 0 4px;font-family:var(--f-wa);font-size:13px;color:#f3e3b8;letter-spacing:.05em}
+.achnew{color:var(--ink);width:100%;margin:6px 0 0;padding:7px 10px;border-radius:10px;background:#fff7dc;box-shadow:0 0 0 2px #e9b33a;font-size:12.5px;font-weight:800;text-align:left;animation:rlin .45s 1.5s both}
+.achnew b{color:#b06a00}
+svg .furin{transform-box:fill-box;transform-origin:50% 0;animation:furin 2.6s ease-in-out infinite alternate}
+@keyframes furin{from{transform:rotate(-7deg)}to{transform:rotate(7deg)}}
+
 svg .kwarn{animation:blink .5s steps(2) infinite alternate}
 .guest.melt{animation:melt .38s ease-in-out infinite alternate}
 @keyframes melt{from{filter:drop-shadow(0 0 0 #fff6c8) brightness(1)}to{filter:drop-shadow(0 0 7px #fff6c8) brightness(1.25);opacity:.7}}
@@ -1023,6 +1056,12 @@ div.owned{display:none!important}
 /* 演出 */
 .chainfl{position:absolute;z-index:4;border-radius:6px;pointer-events:none;box-shadow:inset 0 0 0 4px #ffd84a,0 0 22px #ffd84a;animation:chainfl .9s ease-out forwards}
 @keyframes chainfl{0%{opacity:0;transform:scale(.9)}25%{opacity:1;transform:scale(1.03)}100%{opacity:0;transform:scale(1)}}
+.rainfx{position:absolute;inset:0;z-index:2;pointer-events:none;opacity:0;transition:opacity .8s;border-radius:inherit;
+  background:repeating-linear-gradient(105deg,transparent 0 31px,rgba(210,230,255,.5) 31px 32.5px,transparent 32.5px 61px),repeating-linear-gradient(98deg,transparent 0 47px,rgba(210,230,255,.35) 47px 48px,transparent 48px 83px);
+  background-size:61px 140px,83px 190px;animation:rainmv .5s linear infinite}
+.stage.rainy .rainfx{opacity:.55}
+@keyframes rainmv{to{background-position:-38px 140px,-27px 190px}}
+@media (prefers-reduced-motion:reduce){.rainfx{animation:none}}
 .tensefx{display:none;position:absolute;inset:0;z-index:7;pointer-events:none;border-radius:inherit}
 .stage.tense .tensefx{display:block;box-shadow:inset 0 0 40px 10px #e5393e99;animation:tense .85s ease-in-out infinite}
 @keyframes tense{50%{box-shadow:inset 0 0 18px 4px #e5393e55}}
@@ -1339,7 +1378,7 @@ svg .worry{display:none}
       <div class="portrait">
         <svg viewBox="0 0 64 64" aria-hidden="true">
           <g stroke="#3a2216" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round">
-            <path d="M6 64 C8 52 18 45.5 32 45.5 C46 45.5 56 52 58 64 Z" fill="#6a4c8c"/>
+            <path class="kimono" d="M6 64 C8 52 18 45.5 32 45.5 C46 45.5 56 52 58 64 Z" fill="#6a4c8c"/>
             <path d="M22 46.5 L32 60 L42 46.5" fill="none" stroke="#fff6e6" stroke-width="3.4"/>
             <path d="M25 46 L32 55.5 L39 46" fill="none" stroke="#d8432e" stroke-width="1.6"/>
             <circle cx="17" cy="14.5" r="6.4" fill="#6e4a2e"/><circle cx="47" cy="14.5" r="6.4" fill="#6e4a2e"/>
@@ -1355,7 +1394,7 @@ svg .worry{display:none}
             <path d="M29 37 Q32 40 35 37" fill="none" stroke-width="1.3"/>
             <ellipse cx="20" cy="35" rx="2.6" ry="1.5" fill="#ff8f86" opacity=".55" stroke="none"/><ellipse cx="44" cy="35" rx="2.6" ry="1.5" fill="#ff8f86" opacity=".55" stroke="none"/>
             <path d="M40 9 L50 4" stroke="#c8891a" stroke-width="1.6"/>
-            <g fill="#e5393e" stroke-width="1"><circle cx="44" cy="10" r="2.6"/><circle cx="47.6" cy="9" r="2.6"/><circle cx="45.6" cy="12.6" r="2.6"/></g>
+            <g class="hana" fill="#e5393e" stroke-width="1"><circle cx="44" cy="10" r="2.6"/><circle cx="47.6" cy="9" r="2.6"/><circle cx="45.6" cy="12.6" r="2.6"/></g>
             <circle cx="45.8" cy="10.6" r="1.2" fill="#ffe08a" stroke="none"/>
           </g>
         </svg>
@@ -1583,11 +1622,11 @@ try{const d=JSON.parse(localStorage.getItem(SAVE_KEY)||'null');if(d)SV=Object.as
 function save(){try{localStorage.setItem(SAVE_KEY,JSON.stringify(SV))}catch(e){}}
 // 難易度見直し（v2）：やさしいモードは最初オフに
 if(!SV.diff2){SV.easy=false;SV.diff2=1;save()}
-if(SV.unlockAll===undefined){SV.unlockAll=true;save()} // すべての機能を解放（設定でオフにできる）
+if(SV.unlockAll===undefined){SV.unlockAll=false;save()} // すべて解放（公開版は最初オフ。設定でオンにできる）
 const totalStars=()=>Object.values(SV.stars).reduce((a,b)=>a+b,0);
 let STARS=totalStars();
 SV.cfg=Object.assign({bgm:70,se:80,vib:true,fx:true},SV.cfg||{});
-SV.bank=SV.bank||0; SV.shop=SV.shop||{}; SV.dex=SV.dex||{}; SV.best=SV.best||0; SV.daily=SV.daily||{}; // 第2版：小判・改装・図鑑・エンドレス・今日のお題
+SV.ach=SV.ach||{}; SV.kimono=SV.kimono||'fuji'; SV.bank=SV.bank||0; SV.shop=SV.shop||{}; SV.dex=SV.dex||{}; SV.best=SV.best||0; SV.daily=SV.daily||{}; // 第2版：小判・改装・図鑑・エンドレス・今日のお題
 const maxOpen=()=>{if(SV.unlockAll)return 100;let m=1;while(m<100&&(SV.stars[m]||0)>0)m++;return m};
 const curStage=()=>{let m=1;while(m<100&&(SV.stars[m]||0)>0)m++;return m};
 const UP_AT=[['kanban',8],['dango',20],['fusuma',35],['bath',55],['pochi',80],['maneki',110],['quick',145],['nobori',185]];
@@ -1783,7 +1822,7 @@ function tick(now){
     if(hitStopT>0){hitStopT-=dt}
     else if(running) step(dt,(SV.easy?.75:1)*(slow?.3:1));
     particles(running?dt:0);
-    frame(); bgmSync(); tutTick(); coachCheck(now);
+    frame(); bgmSync(); ambTick(); tutTick(); coachCheck(now);
   }catch(err){console.error(err)}
 }
 function step(dt,speed=1){
@@ -1899,6 +1938,8 @@ function endDay(result){
       if(D.daily){S.prev=SV.daily[D.dkey]||0;if(S.got>S.prev)SV.daily[D.dkey]=S.got;S.newUps=[]}
       else{S.prev=SV.stars[n]||0; const before=STARS; if(S.got>S.prev){SV.stars[n]=S.got;STARS=totalStars()}
         S.newUps=UP_AT.filter(u=>before<u[1]&&STARS>=u[1]).map(u=>u[0])} }
+    S.newAch=checkAch({nofight:result==='clear'&&!D.endless&&!D.daily&&n>=11&&S.stat.fights===0,double:result==='clear'&&!D.endless&&S.cr>=tgt(D)*2});
+    if(S.newAch.some(k=>KIMONO.some(m=>m.need===k))) applyKimono();
     save(); }
   S.history[S.day]={cr:S.cr,result};
   sfx(result==='clear'?'win':'lose');
@@ -1924,6 +1965,8 @@ function frame(){
   $('hSus').textContent=Math.floor(S.sus)+'%';
   $('hSusBar').style.width=S.sus+'%';
   $('mSus').classList.toggle('hot',mixed());
+  { if(!stage.querySelector('.rainfx')){const r=document.createElement('div');r.className='rainfx';innSvg.after(r)}
+    stage.classList.toggle('rainy',S.scene==='play'&&!!(DAYS[S.day].tw&&DAYS[S.day].tw.rain)); }
   { const dz=S.sus>=70; if(!stage.querySelector('.tensefx')){const t=document.createElement('div');t.className='tensefx';stage.appendChild(t)} stage.classList.toggle('tense',dz&&S.scene==='play');
     if(dz&&S.scene==='play'&&!S.paused){ const t=performance.now(); if(!S.hbT||t-S.hbT>850){S.hbT=t; if(ac&&!muted&&SV.cfg.se>0){sfxBus();VOLK=SV.cfg.se/80;const u=ac.currentTime;taiko(u,{v:.32,f:58,d:.3});taiko(u+.18,{v:.22,f:52,d:.3})}} }
     $('mSus').classList.toggle('danger',dz); if(dz&&!S.susWarn&&S.scene==='play'){sfx('alarm');buzz(150)} S.susWarn=dz; }
@@ -2218,6 +2261,7 @@ function drawInn(){
     <text x="${cx}" y="${sy+sh*.72}" text-anchor="middle" font-family="Dela Gothic One, sans-serif" font-size="${Math.min(sh*.62,sgw/7.4)}" fill="${gold?'#3a2216':'#ffe7a8'}" stroke="#2e180c" stroke-width="0">ぽんぽこ温泉宿</text>`;
   if(own('shachi')) for(const [fx,fl] of [[cx-sw*.34,1],[cx+sw*.34,-1]]) s+=`<g transform="translate(${fx} ${rY-6}) scale(${fl} 1)"><path d="M0 4c-2-9 2-16 9-19l2 4c-4 3-6 7-5 14z" fill="url(#gGold)" stroke="#3a2216" stroke-width="1.2"/><path d="M9-15l5-3-1 6z" fill="url(#gGold)" stroke="#3a2216" stroke-width="1"/></g>`;
   if(own('lantern')) for(let k=1;k<=5;k++){const lx=x0+sw*k/6, ly=eY+12; s+=`<line x1="${lx}" y1="${eY+4}" x2="${lx}" y2="${ly-6}" stroke="#2e180c" stroke-width="1.2"/><ellipse cx="${lx}" cy="${ly}" rx="5" ry="6.5" fill="url(#gLanBody)" stroke="#3a2216" stroke-width="1"/>`}
+  if(deco('furin')) for(let k=0;k<6;k++){const fx=x0+sw*(k+.5)/6, fy=eY+9; s+=`<g class="furin" style="animation-delay:${-k*.43}s"><line x1="${fx}" y1="${eY+3}" x2="${fx}" y2="${fy}" stroke="#2e180c" stroke-width="1"/><path d="M${fx-4.5} ${fy+6} q0 -6.5 4.5 -6.5 q4.5 0 4.5 6.5 z" fill="#bfe6ff" fill-opacity=".85" stroke="#2a4a6a" stroke-width="1"/><path d="M${fx-2.6} ${fy+3} q2.6 2 5.2 0" stroke="#e5393e" stroke-width="1.1" fill="none"/><rect x="${fx-1.7}" y="${fy+8}" width="3.4" height="7" fill="#fff6e0" stroke="#7a5a3a" stroke-width=".6"/></g>`}
   // 提灯
   for(const lx of x0>30?[x0-24,x1+24]:[x0+2,x1-2]){
     const ly=eY+26;
@@ -2603,7 +2647,7 @@ function unlockTracks(){for(const k in TRACKS){const T=TRACKS[k]; if(!T.el||T.un
   const pr=T.el.play(); if(pr&&pr.then) pr.then(()=>{if(!T.src){T.el.pause()} T.el.muted=v}).catch(()=>{T.unlocked=false;T.el.muted=v}); }}
 function trackGain(k){
   const T=TRACKS[k]; if(T.gain||!ac) return;
-  try{T.node=ac.createMediaElementSource(T.el); T.gain=ac.createGain(); T.gain.gain.value=0; T.node.connect(T.gain).connect(ac.destination)}catch(e){T.gain=null}
+  try{T.node=ac.createMediaElementSource(T.el); T.filt=ac.createBiquadFilter(); T.filt.type='lowpass'; T.filt.frequency.value=20000; T.gain=ac.createGain(); T.gain.gain.value=0; T.node.connect(T.filt).connect(T.gain).connect(ac.destination)}catch(e){T.gain=null}
 }
 function trackStart(k){
   const T=TRACKS[k]; if(T.src) return;
@@ -2677,8 +2721,43 @@ function bgmSync(){
   if(BGM.bus) BGM.bus.gain.setTargetAtTime(.45*vol,ac.currentTime,.1);
   for(const k in TRACKS){const T=TRACKS[k]; if(!T.src) continue;
     if(T.gain) T.gain.gain.setTargetAtTime(T.vol*vol,ac.currentTime,.1); else T.el.volume=Math.min(1,T.vol*vol*2.5)}
+  // 章・場面で曲の表情を変える：せっかち＝少し速く、試練＝少し速く、残り10秒＝さらに速く、長雨＝こもった音、満月＝やわらかい音
+  { const m=bgmMood(), P=TRACKS.play;
+    if(P.el&&Math.abs((P.el.playbackRate||1)-m.rate)>.001){try{P.el.playbackRate=m.rate}catch(e){}}
+    if(P.filt&&P.filtF!==m.lp){P.filtF=m.lp; P.filt.frequency.setTargetAtTime(m.lp,ac.currentTime,.4)} }
   // 再生が拒否されていたら次のタップで再挑戦
   if(BGM.mode&&TRACKS[BGM.mode]&&TRACKS[BGM.mode].retry){} 
+}
+
+// 第7版：場面ごとの曲の表情
+function bgmMood(){
+  if(!S||!S.q||S.scene!=='play') return {rate:1,lp:20000};
+  const D=DAYS[S.day], tw=D.tw||{}; let rate=1;
+  if(tw.fast) rate+=.05; if(D.trial) rate+=.03; if(S.t<=10&&S.cd<=0) rate=Math.max(rate,1.1);
+  return {rate:Math.round(rate*100)/100, lp:tw.rain?1500:tw.moon?5200:20000};
+}
+// 試練の始まり・章のおしまいの太鼓
+function taikoRoll(){ if(muted||!ac||SV.cfg.se<=0) return; sfxBus(); VOLK=SV.cfg.se/80; const t=ac.currentTime+.02;
+  for(let k=0;k<6;k++) taiko(t+k*.11,{v:.22+k*.04,f:110,out:sfxOut}); taiko(t+.8,{v:.5,out:sfxOut}); hyoshi(t+1.05,{v:.18,out:sfxOut}) }
+// 環境音：長雨＝雨音、満月＝鈴虫、工事＝トンカチ
+const AMB={rain:null,rg:null,t:0,day:-1,trial:false};
+function ambStopRain(){ if(AMB.rain){const r=AMB.rain,g=AMB.rg; try{g.gain.setTargetAtTime(0,ac.currentTime,.3); setTimeout(()=>{try{r.stop()}catch(e){}},900)}catch(e){} AMB.rain=null; AMB.rg=null} }
+function ambTick(){
+  if(!ac) return;
+  const on=S&&S.q&&S.scene==='play'&&!S.paused&&!muted&&SV.cfg.se>0&&ac.state==='running';
+  if(!on){ambStopRain(); return}
+  sfxBus(); const D=DAYS[S.day], tw=D.tw||{}, now=ac.currentTime, v=SV.cfg.se/80;
+  if(AMB.day!==S.day||S.t>=D.time-.05){AMB.day=S.day; AMB.trial=false; AMB.t=now+1.5}
+  if(D.trial&&!AMB.trial&&S.cd<=0){AMB.trial=true; taikoRoll()}
+  if(tw.rain&&!AMB.rain&&noiseBuf){ const src=ac.createBufferSource(); src.buffer=noiseBuf; src.loop=true;
+    const f=ac.createBiquadFilter(); f.type='bandpass'; f.frequency.value=1600; f.Q.value=.4; const g=ac.createGain(); g.gain.value=0; g.gain.setTargetAtTime(.05*v,now,.6);
+    src.connect(f).connect(g).connect(sfxOut); src.start(); AMB.rain=src; AMB.rg=g }
+  if(!tw.rain) ambStopRain();
+  if(now<AMB.t) return;
+  VOLK=v;
+  if(tw.moon){ for(let k=0;k<4;k++) tone(4300+Math.random()*200,now+k*.07,.05,{type:'sine',v:.012,out:sfxOut,rv:.4}); AMB.t=now+1.1+Math.random()*1.4 }
+  else if(tw.kouji){ ka(now,{v:.06,out:sfxOut}); ka(now+.22,{v:.05,out:sfxOut}); AMB.t=now+5+Math.random()*4 }
+  else AMB.t=now+2;
 }
 function initAudio(){ if(ac) return; try{if(navigator.audioSession)navigator.audioSession.type='playback'}catch(e){} try{ac=new (window.AudioContext||window.webkitAudioContext)()}catch(e){ac=null} }
 function onUserTap(){
@@ -2792,13 +2871,15 @@ function particles(dt){
   const flies=P.filter(p=>p.k==='f').length, birds=P.filter(p=>p.k==='b').length;
   if(night&&flies<12&&Math.random()<.08) P.push({k:'f',x:Math.random()*L.w,y:L.top+L.H-20+Math.random()*60,vx:(Math.random()-.5)*16,vy:(Math.random()-.5)*10,ph:Math.random()*6,life:0,max:4+Math.random()*3});
   if(th==='hiru'&&birds<3&&Math.random()<.006){const dir=Math.random()<.5?1:-1;for(let k=0;k<2+(Math.random()*2|0);k++)P.push({k:'b',x:dir>0?-20-k*16:L.w+20+k*16,y:12+Math.random()*30+k*6,vx:dir*(34+Math.random()*10),ph:Math.random()*6,s:5+Math.random()*2})}
-  if(!night&&th!=='hiru'&&leaves<14&&Math.random()<.05) P.push({k:'l',x:Math.random()*L.w,y:-10,vx:10+Math.random()*16,vy:18+Math.random()*16,a:Math.random()*6,va:(Math.random()-.5)*3,s:4+Math.random()*3,c:['#d8432e','#e9772e','#f0b03c'][Math.random()*3|0],ph:Math.random()*6});
+  const saku=deco('sakura');
+  if((saku||!night&&th!=='hiru')&&leaves<(saku?18:14)&&Math.random()<.05) P.push({k:'l',x:Math.random()*L.w,y:-10,vx:10+Math.random()*16,vy:18+Math.random()*16,a:Math.random()*6,va:(Math.random()-.5)*3,s:4+Math.random()*3,c:saku?['#ffc3d6','#ff9fbf','#ffe4ee'][Math.random()*3|0]:['#d8432e','#e9772e','#f0b03c'][Math.random()*3|0],ph:Math.random()*6});
   if(steam<10&&Math.random()<.12){const side=Math.random()<.5?-1:1;P.push({k:'s',x:L.cx+side*Math.random()*L.sw*.32,y:L.top-L.roofH-4,vy:-14-Math.random()*8,life:0,max:3+Math.random()*1.5,s:8+Math.random()*6})}
   for(const p of P){
     if(p.k==='l'){p.ph+=dt*2;p.x+=(p.vx+Math.sin(p.ph)*14)*dt;p.y+=p.vy*dt;p.a+=p.va*dt;
       px.save();px.translate(p.x,p.y);px.rotate(p.a);px.fillStyle=p.c;px.beginPath();
       for(let i=0;i<5;i++){const an=i/5*Math.PI*2-Math.PI/2, an2=an+Math.PI/5;px.lineTo(Math.cos(an)*p.s,Math.sin(an)*p.s);px.lineTo(Math.cos(an2)*p.s*.45,Math.sin(an2)*p.s*.45)}
       px.fill();px.restore()}
+    else if(p.k==='r'){p.y+=p.vy*dt;p.x-=p.vy*dt*.12;px.strokeStyle='rgba(200,225,255,.7)';px.lineWidth=1.5;px.beginPath();px.moveTo(p.x,p.y);px.lineTo(p.x+p.s*.12,p.y-p.s);px.stroke()}
     else if(p.k==='f'){p.life+=dt;p.ph+=dt*3;p.x+=(p.vx+Math.sin(p.ph)*8)*dt;p.y+=(p.vy+Math.cos(p.ph*1.3)*6)*dt;
       const a=Math.max(0,Math.sin(Math.PI*p.life/p.max))*(.55+.45*Math.sin(p.ph*2.2));
       const gg=px.createRadialGradient(p.x,p.y,0,p.x,p.y,8);gg.addColorStop(0,`rgba(230,255,140,${a})`);gg.addColorStop(1,'rgba(230,255,140,0)');px.fillStyle=gg;px.beginPath();px.arc(p.x,p.y,8,0,7);px.fill();
@@ -2808,7 +2889,7 @@ function particles(dt){
     else{p.life+=dt;p.y+=p.vy*dt;p.x+=Math.sin(p.life*2)*6*dt;const a=Math.max(0,.38*Math.sin(Math.PI*p.life/p.max));
       px.fillStyle=`rgba(255,255,255,${a})`;px.beginPath();px.arc(p.x,p.y,p.s+p.life*5,0,7);px.fill()}
   }
-  P=P.filter(p=>p.k==='l'?p.y<L.h+20&&p.x<L.w+20:p.k==='b'?p.x>-60&&p.x<L.w+60:p.k==='f'&&!night?false:p.life<p.max);
+  P=P.filter(p=>p.k==='r'?p.y<L.h+10:p.k==='l'?p.y<L.h+20&&p.x<L.w+20:p.k==='b'?p.x>-60&&p.x<L.w+60:p.k==='f'&&!night?false:p.life<p.max);
 }
 
 /* タイトルなどの背景：夕暮れの温泉郷 */
@@ -2900,13 +2981,17 @@ function showScreen(){
              :`<button class="go" data-stage="${st}">もう一度</button>`;
     if(r==='clear'){confetti();[0,1,2].forEach(k=>{if(k<n)setTimeout(()=>sfx('star'+(k+1)),250+k*250)})}
     if(r==='clear'&&n===3){setTimeout(()=>{confetti();sfx('special');buzz(60)},1050)}
+    // 試練の面を初めてクリア＝章のおしまい
+    const chapc=r==='clear'&&D.trial&&!D.daily&&!S.prev?`<div class="chapclear">第${D.chap+1}章「${D.chapName}」おしまい${st<100?`<small>つぎは 第${D.chap+2}章「${DAYS[st].chapName}」</small>`:''}</div>`:'';
+    if(chapc) setTimeout(()=>{sfx('special');taikoRoll()},1300);
+    if((S.newAch||[]).length) setTimeout(()=>sfx('star3'),1600);
     sc.innerHTML=`<div class="scroll${r==='clear'&&n===3?' perfect':''}">${r==='clear'&&n===3?'<div class="perfect-ribbon">★3 大繁盛！</div>':''}<div class="hanko">${hanko}</div>
       <div class="stars">${[0,1,2].map(i=>starSvg(i<n)).join('')}</div>${conds}
       ${n>S.prev?'<span class="newrec">ベスト更新！</span>':''}
       <h2 class="${r==='caught'||r==='abandon'?'R':''}">${title}</h2>
       <dl class="result"><dt>泊まったお客</dt><dd>${S.stat.served}組</dd>${D.tags?`<dt>湯仲間ボーナス</dt><dd>${S.stat.chain}回</dd>`:''}${D.foes?`<dt>撃退した山賊</dt><dd>${S.stat.beat}匹</dd>`:''}</dl>
       <p class="earn">＋${S.earn.toLocaleString()} 小判<small>（宿の改装に使える）</small></p>
-      ${tip}${ups}</div>
+      ${chapc}${resultLine(D,r,n)}${achLine(S.newAch||[])}${tip}${ups}</div>
       <div class="btnrow resrow">${r==='clear'&&last?'<button class="go" data-story="end">最終話を見る</button>':''}${btn}<button class="go sub" data-go="map">ステージ選択</button></div>`;
   }
   scr.hidden=false; sc.querySelector('button').focus();
@@ -2925,6 +3010,7 @@ function showMap(){
       <button class="modeb2" data-go="endless" ${endlessOpen()?'':'disabled'}><b>エンドレス</b><small>${endlessOpen()?`ベスト ${SV.best||0}組`:'100面クリアで解放'}</small></button>
       <button class="modeb2" data-go="shop"><b>宿の改装</b><small>小判 ${(SV.bank||0).toLocaleString()}</small></button>
       <button class="modeb2" data-go="dex"><b>お客さん図鑑</b><small>${DEX.filter(d=>SV.dex[d[0]]).length} / ${DEX.length}</small></button>
+      <button class="modeb2 wide" data-go="ach"><b>ごほうび帳</b><small>${ACH.filter(a=>SV.ach[a.k]).length} / ${ACH.length}　着物 ${KIMONO.filter(m=>kimOpen(m.k)).length} / ${KIMONO.length}</small></button>
     </div>
     <div class="unlock"><span>${next?`あと★${next[1]-STARS}で「${UPS[next[0]].name}」`:SV.unlockAll?'すべて解放中（設定で切りかえ）':'強化はすべて解放済み！'}</span><div class="prog"><i style="width:${pct}%"></i></div></div>
     ${UP_AT.some(u=>has(u[0]))?`<div class="owned">${UP_AT.filter(u=>has(u[0])).map(u=>`<span>${UPS[u[0]].name}</span>`).join('')}</div>`:''}
@@ -2969,7 +3055,7 @@ const SHOP=[
 ];
 const own=k=>!!(SV.shop&&SV.shop[k]);
 function buyShop(k){const it=SHOP.find(x=>x.k===k); if(!it||own(k)||(SV.bank||0)<it.cost){sfx('nope');return}
-  SV.bank-=it.cost; SV.shop[k]=1; save(); sfx('win'); confetti(); showShop(); scenery(); drawInn()}
+  SV.bank-=it.cost; SV.shop[k]=1; save(); sfx('win'); confetti(); const na=checkAch({}); showShop(); if(na.length){const b=sc.querySelector('.bankline'); if(b) b.insertAdjacentHTML('afterend',achLine(na))} scenery(); drawInn()}
 function showShop(){
   const pk=document.querySelector('.portrait svg').innerHTML;
   sc.innerHTML=`<p class="h3">宿の改装</p><p class="bankline">小判 <b>${(SV.bank||0).toLocaleString()}</b><small>面を遊ぶと売上が小判になる（失敗は半分）</small></p>
@@ -2994,6 +3080,65 @@ function showDex(){
     <div class="dex">${DEX.map(([k,name,sym,vb,badge])=>{const c=SV.dex[k]||0;return `<div class="dexc ${c?rank(c):'none'}"><svg viewBox="0 0 ${vb} ${vb}" aria-hidden="true"><use href="#${sym}"/>${k==='A_v'||k==='B_v'||k==='C_v'?'<use href="#vip"/>':''}${k==='oyabun'?'<use href="#oyabun"/>':''}</svg>${badge?`<i>${badge}</i>`:''}<b>${c?name:'？？？'}</b><small>${c?`×${c}`:'まだ'}</small></div>`}).join('')}</div>
     <div class="btnrow"><button class="go sub" data-go="map">もどる</button></div>`;
   scr.hidden=false;
+}
+
+/* ================= ごほうび帳（第7版）：実績・女将の着物・宿の飾り ================= */
+const KIMONO=[
+  {k:'fuji',name:'藤',col:'#6a4c8c',hana:'#e5393e',need:null},
+  {k:'sakura',name:'桜',col:'#e0799a',hana:'#fff2a8',need:'star10'},
+  {k:'wakatake',name:'若竹',col:'#4f8a5c',hana:'#ffcf3a',need:'dex10'},
+  {k:'momiji',name:'紅葉',col:'#c8452a',hana:'#ffe08a',need:'half'},
+  {k:'yozora',name:'夜空',col:'#2d3b6e',hana:'#ffe08a',need:'all100'},
+  {k:'kin',name:'金襴',col:'#c99a2e',hana:'#e5393e',need:'star50'}];
+const cleared=()=>Object.keys(SV.stars).filter(n=>+n<=100&&SV.stars[n]>0).length;
+const star3=()=>Object.keys(SV.stars).filter(n=>+n<=100&&SV.stars[n]>=3).length;
+const trials=()=>[10,20,30,40,50,60,70,80,90,100].filter(n=>(SV.stars[n]||0)>0).length;
+const dexN=()=>DEX.filter(d=>SV.dex[d[0]]).length;
+const ACH=[
+  {k:'first',name:'はじめてのお客',desc:'ステージ1をクリア',test:()=>(SV.stars[1]||0)>0},
+  {k:'chap1',name:'第1章おしまい',desc:'ステージ10をクリア',test:()=>(SV.stars[10]||0)>0},
+  {k:'nofight',name:'けんかゼロ',desc:'ステージ11以降を、ケンカ0回でクリア',test:c=>!!(c&&c.nofight)},
+  {k:'double',name:'大入り袋',desc:'1つの面で、目標の2倍を売り上げる',test:c=>!!(c&&c.double)},
+  {k:'star10',name:'大繁盛の宿',desc:'★3を10面でとる',test:()=>star3()>=10,rw:'女将の着物「桜」'},
+  {k:'trial5',name:'試練の達人',desc:'試練の面を5つクリア',test:()=>trials()>=5,rw:'宿の飾り「風鈴」'},
+  {k:'dex10',name:'お客さん通',desc:'図鑑に10種類のる',test:()=>dexN()>=10,rw:'女将の着物「若竹」'},
+  {k:'half',name:'折り返し',desc:'ステージ50をクリア',test:()=>(SV.stars[50]||0)>0,rw:'女将の着物「紅葉」'},
+  {k:'shopall',name:'改装上手',desc:'宿の改装をすべてそろえる',test:()=>SHOP.every(it=>own(it.k)),rw:'宿の飾り「桜吹雪」'},
+  {k:'daily3',name:'毎日のお題',desc:'今日のお題を3日クリア',test:()=>Object.values(SV.daily||{}).filter(v=>v>0).length>=3},
+  {k:'dexall',name:'図鑑コンプリート',desc:'図鑑をすべて埋める',test:()=>dexN()>=DEX.length},
+  {k:'trialall',name:'試練をこえて',desc:'試練の面を10すべてクリア',test:()=>trials()>=10},
+  {k:'all100',name:'全100面制覇',desc:'ステージ100をクリア',test:()=>(SV.stars[100]||0)>0,rw:'女将の着物「夜空」'},
+  {k:'star50',name:'名宿の女将',desc:'★3を50面でとる',test:()=>star3()>=50,rw:'女将の着物「金襴」'}];
+const deco=k=>k==='furin'?!!SV.ach.trial5:k==='sakura'?!!SV.ach.shopall:false;
+// 条件を満たした実績を記録し、新しく取れたものを返す
+function checkAch(c){ const nw=[]; for(const a of ACH) if(!SV.ach[a.k]){let ok=false; try{ok=a.test(c)}catch(e){} if(ok){SV.ach[a.k]=1;nw.push(a.k)}} if(nw.length)save(); return nw }
+const kimOpen=k=>{const m=KIMONO.find(x=>x.k===k); return !!m&&(!m.need||!!SV.ach[m.need])};
+function applyKimono(){ const m=KIMONO.find(x=>x.k===SV.kimono&&kimOpen(x.k))||KIMONO[0];
+  document.documentElement.style.setProperty('--kimono',m.col); document.documentElement.style.setProperty('--hana',m.hana) }
+// 一度にたくさん取れたときは、着物・飾りのごほうびを優先して3つまで見せる
+const achLine=ks=>{ if(!ks.length) return ''; const o=[...ks].sort((a,b)=>!!ACH.find(x=>x.k===b).rw-!!ACH.find(x=>x.k===a).rw), sh=o.slice(0,3);
+  return `<div class="achnew">🎖 ごほうび解放！ ${sh.map(k=>{const a=ACH.find(x=>x.k===k);return `<b>「${a.name}」</b>${a.rw?`→ ${a.rw}`:''}`}).join('／')}${o.length>3?`　ほか${o.length-3}つ（ごほうび帳で見られる）`:''}</div>` };
+function showAch(){
+  const pk=document.querySelector('.portrait svg').innerHTML;
+  const got=ACH.filter(a=>SV.ach[a.k]).length;
+  sc.innerHTML=`<p class="h3">ごほうび帳</p><p class="bankline">ごほうび <b>${got} / ${ACH.length}</b><small>ごほうびを取ると、女将の着物や宿の飾りがふえる</small></p>
+    <p class="achh" style="margin-top:2px">女将の着物（タップで着がえ）</p>
+    <div class="kimonos">${KIMONO.map(m=>{const op=kimOpen(m.k);return `<button class="kim ${SV.kimono===m.k?'on':''}" data-kimono="${m.k}" ${op?'':'disabled'} aria-label="着物 ${op?m.name:'まだ'}"><svg viewBox="0 0 64 64" style="--kimono:${m.col};--hana:${m.hana}">${pk}</svg>${op?m.name:'？？？'}</button>`}).join('')}</div>
+    <p class="achh">ごほうび一覧</p>
+    <div class="ach">${ACH.map(a=>`<div class="achc ${SV.ach[a.k]?'got':''}"><span class="md">${SV.ach[a.k]?'★':'・'}</span><div><b>${a.name}</b><small>${a.desc}</small>${a.rw?`<span class="rw">ごほうび：${a.rw}</span>`:''}</div></div>`).join('')}</div>
+    <div class="btnrow"><button class="go sub" data-go="map">もどる</button></div>`;
+  scr.hidden=false;
+}
+// クリア画面のひとこと（女将ポン子。試練の面は瓦版屋ミミが取材に来る）
+function resultLine(D,r,n){
+  const st=D.n, pick=a=>a[st%a.length];
+  let who='ponko', t, bad=r!=='clear';
+  if(r==='clear'&&D.trial&&st>=20&&!D.daily){who='mimi'; t=pick(['試練の面を乗りきったぴょん！ 瓦版の一面はこれで決まりだぴょん。','すごいぴょん！ 今夜の宿のにぎわい、ぜんぶ書きとめたぴょん。','このいそがしさでケンカなし…！ 女将さん、ただ者じゃないぴょん。'])}
+  else if(r==='clear'&&n===3) t=pick(['大繁盛！ 今日のお客さん、みんなにこにこでしたね。','お代もたっぷり、お題もばっちり！ 宿の改装、なにからにしましょう？','ぜーんぶ、うまくいきました！ この調子、この調子♪']);
+  else if(r==='clear'){ const c=['ふう…なんとかバレずにすみました！','合格です！ でも、もう少しお代をいただけたかも。','ふすまの向こうがいぬだなんて、だれも気づいてません…たぶん。'];
+    const tw=D.tw||{}; if(tw.kouji)c.push('工事のトンカチの音、お客さんにはないしょです。'); if(tw.rain)c.push('雨もり、なんとかしのぎました…！'); if(tw.moon)c.push('満月の夜は、化け術がもたなくてドキドキします。'); if(tw.fast)c.push('せっかちなお客さん、はやく案内できてよかった！'); t=pick(c)}
+  else t=r==='caught'?pick(['あわわ…ケンカになっちゃいました。次は間をあけて…！','壁かふすま、もっと使えばよかったかも…。']):r==='abandon'?pick(['お客さんを待たせすぎちゃいました…。','満室のときは、お帰りいただくのも手ですね…。']):pick(['あとちょっと…！ もうひとがんばりです。','おしい！ つぎはもっとお代をいただきましょう。']);
+  return `<div class="rline${bad?' bad':''}"><div class="rf">${CH[who].svg()}</div><p><small>${CH[who].name}</small>${t}</p></div>`;
 }
 /* ================= ストーリー ================= */
 const CH={
@@ -3089,7 +3234,10 @@ function titleStart(){
   if(starting) return; starting=true;
   initAudio(); sfx('start'); buzz(30);
   const t=sc.querySelector('.ttl'); if(t) t.classList.add('leaving');
-  setTimeout(()=>{starting=false; if(!sc.querySelector('.ttl'))return; S=newGame(); if(!SV.op) playOpening(showMap); else showMap()},320);
+  setTimeout(()=>{starting=false; if(!sc.querySelector('.ttl'))return; S=newGame(); if(!SV.op) playOpening(firstRun); else showMap()},320);
+}
+// 初めての人はステージ選択を挟まず、第1話からステージ1へ
+function firstRun(){ if(!Object.keys(SV.stars).length&&!SV.story.includes('s1')) startStage(1); else showMap()
 }
 let OP=null;
 const opInn=lit=>`<svg class="op-bg" viewBox="0 0 360 640" preserveAspectRatio="xMidYMid slice">
@@ -3403,10 +3551,13 @@ function nextRule(){
     <div class="btnrow"><button class="go" data-go="rule">${pendingRules.length?'つぎへ':'はじめる'}</button></div>`;
   scr.hidden=false; sc.querySelector('button').focus();
 }
+// ものがたり中は、画面のどこをタップしても次へ進む（文字の箱の外でも）
+scr.addEventListener('click',e=>{ if(VN&&!e.target.closest('#sc')){advanceStory()} });
 sc.addEventListener('click',e=>{
   initAudio(); ac&&ac.resume&&ac.resume();
   if(e.target.closest('#vn')&&!e.target.closest('[data-go="vnskip"]')){advanceStory();return}
   const so=e.target.closest('[data-story]'); if(so){const st=STORY.find(x=>x.id===so.dataset.story);playStory(st,()=>{S&&S.scene==='result'?showScreen():showMap()});return}
+  const km=e.target.closest('[data-kimono]'); if(km&&!km.disabled){SV.kimono=km.dataset.kimono;save();applyKimono();sfx('sel');showAch();return}
   const by=e.target.closest('[data-buy]'); if(by&&!by.disabled){buyShop(by.dataset.buy);return}
   const t=e.target.closest('[data-stage]'); if(t&&!t.disabled){sfx('sel');startStage(+t.dataset.stage);return}
   if(S&&S.scene==='title'&&e.target.closest('.ttl')&&!e.target.closest('[data-go="cfg"]')){titleStart();return}
@@ -3418,6 +3569,7 @@ sc.addEventListener('click',e=>{
   if(g==='daily'||g==='endless'){if(g==='endless'&&!endlessOpen())return;sfx('sel');startSpecial(g);return}
   if(g==='shop'){sfx('sel');showShop();return}
   if(g==='dex'){sfx('sel');showDex();return}
+  if(g==='ach'){sfx('sel');showAch();return}
   if(g==='rule'){nextRule();return}
   if(g==='open'){scr.hidden=true;startDay();setIcons();return}
   if(g==='vnskip'&&VN){clearInterval(VN.timer);const t=VN.then;VN=null;t();return}
@@ -3539,7 +3691,7 @@ new ResizeObserver(()=>{
 function start(data){
   S=(data&&data.S&&data.S.v===VER)?data.S:newGame();
   if(S.scene==='rule') S.scene='map';
-  layout(); scenery(); sizeParticles(); drawInn(); setIcons(); dirty=true;
+  applyKimono(); layout(); scenery(); sizeParticles(); drawInn(); setIcons(); dirty=true;
   if(S.scene!=='play') showScreen(); else setPause(true);
   requestAnimationFrame(t=>{last=t;requestAnimationFrame(tick)});
 }
