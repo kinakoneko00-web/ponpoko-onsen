@@ -373,7 +373,7 @@ svg .kwarn{animation:blink .5s steps(2) infinite alternate}
 @keyframes tf{0%{opacity:0;transform:scale(1.8)}22%{opacity:1;transform:scale(.95)}32%{transform:scale(1)}100%{opacity:0}}
 .kaze{position:absolute;inset:0;pointer-events:none;z-index:7;background:radial-gradient(circle at 50% 85%,#fff,#ffffffaa 25%,transparent 65%);animation:kaze .7s ease-out forwards}
 @keyframes kaze{from{opacity:1}to{opacity:0}}
-.paused{position:absolute;inset:0;z-index:8;display:grid;place-items:center;background:#24130dcc;font-family:var(--f-display);font-size:32px;color:#fff;text-shadow:var(--stroke)}
+.paused{position:absolute;inset:0;z-index:21;display:grid;place-items:center;background:#24130dcc;font-family:var(--f-display);font-size:32px;color:#fff;text-shadow:var(--stroke)}
 
 /* ---------- 下段：女将と大喝 ---------- */
 .deck{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:stretch}
@@ -754,6 +754,7 @@ body{background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/
 /* 中身が画面より高いとき、上が切れずにスクロールで全部見られるように */
 .screen:not([hidden]){display:flex;flex-direction:column;align-items:center}
 .screen>.sc{margin-block:auto;flex:none}
+.screen .btnrow.stick{position:sticky;bottom:0;z-index:3;padding:10px 0 calc(8px + env(safe-area-inset-bottom));margin-bottom:-8px;background:linear-gradient(transparent,rgba(20,14,40,.85) 38%)}
 .lane-tag.warn{transform:scale(1.14);transform-origin:50% 100%;background:#c8321e!important;animation:warnshake .5s ease-in-out infinite!important;z-index:4}
 @keyframes warnshake{0%,100%{rotate:0deg}25%{rotate:-3deg}75%{rotate:3deg}}
 .lane-tag.warn .gd .lf{color:#fff;font-size:10px}
@@ -1564,7 +1565,7 @@ const strHash=t=>{let h=2166136261;for(const ch of t){h^=ch.codePointAt(0);h=Mat
 const todayKey=(d=new Date())=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 function makeEndless(seed=Math.floor(Math.random()*1e6)){
   const base=genStage(100);
-  return {...base,n:'∞',label:'エンドレス',short:'エンドレス',endless:true,time:5999,target:0,nA:0,nB:0,lostMax:6,boss:null,
+  return {...base,n:'∞',label:'エンドレス',short:'エンドレス',endless:true,time:5999,trial:'',target:0,nA:0,nB:0,lostMax:6,boss:null,
     cols:3,floors:4,holes:[],shape:'',walls:genWalls(17+seed%900,3,4),mission:{k:'nofight'}};
 }
 function makeDaily(key=todayKey()){
@@ -1657,6 +1658,8 @@ function startDay(){
     foes:[],foeT:7,bossDone:false,atkT:1.5,pochiT:2,raidN:0,raidT:0,sp:S.sp||0,ev:null,leak:null,
     evQ:pickEvents(D),rtag:Array.from({length:D.cols*D.floors},()=>D.scroll?TAGS[Math.random()*3|0]:null)});
   for(const o of els.values()){o.el.remove();o.rq&&o.rq.remove()} els.clear();
+  // 前の面の一時停止・吹き出しの残りを片づける
+  stage.querySelectorAll('.paused,.coach').forEach(e=>e.remove()); document.querySelector('.tut')?.remove(); hint=null; stage.classList.remove('lastten','rainy');
   for(const o of foeEls.values()) o.el.remove(); foeEls.clear();
   layout(); scenery(); sizeParticles();
   stage.classList.remove('th-hiru','th-yu','th-yoru','th-asa'); stage.classList.add('th-'+D.theme);
@@ -1664,6 +1667,8 @@ function startDay(){
 }
 function pickEvents(D){
   const pool=[...D.ev].sort(()=>Math.random()-.5), out=[];
+  // エンドレスは80秒前後ごとに事件が起きる
+  if(D.endless){ if(pool.length) for(let k=0;k<60;k++) out.push({at:D.time-25-k*80+(Math.random()*16-8),k:pool[k%pool.length]}); return out }
   for(let k=0;k<D.n2;k++) out.push({at:D.time*(1-(k+1)/(D.n2+1))+(Math.random()*6-3), k:pool[k%pool.length]});
   return out.sort((a,b)=>b.at-a.at);
 }
@@ -1807,7 +1812,7 @@ function startEvent(k){
   S.evN=(S.evN||0)+1; S.ev={k,t:EVT[k],tMax:EVT[k]}; S.leak=null;
   flash(EVN[k],k==='raid'||k==='leak'); sfx(k==='raid'?'boss':'fes');
   if(k==='leak'){
-    const cand=[...Array(S.rooms).keys()].filter(i=>!(S.holes||[]).includes(i));
+    const cand=[...Array(S.rooms).keys()].filter(i=>!(S.holes||[]).includes(i)&&!(S.closed||[]).includes(i)&&!(S.kNext||[]).includes(i));
     const empty=cand.filter(i=>!S.room[i]);
     const list=empty.length?empty:cand;
     S.leak=list[Math.random()*list.length|0];
@@ -1913,8 +1918,8 @@ function step(dt,speed=1){
     dirty=true; sfx(big?'coin2':'coin');
   }
   stepFoes(dt,D);
-  const fp=fightPairs().length;
-  if(fp>(S.prevFp||0)){S.stat.fights+=fp-(S.prevFp||0);hitStopT=.08;redFlash();shake();buzz(80);sfx('alarm');alarmT=.9}
+  const fps=fightPairs(), fp=fps.length, fk=fps.map(q=>q.join('-')), pk=S.prevFk||[], nf=fk.filter(k=>!pk.includes(k)).length; S.prevFk=fk;
+  if(nf>0){S.stat.fights+=nf;hitStopT=.08;redFlash();shake();buzz(80);sfx('alarm');alarmT=.9}
   S.prevFp=fp;
   if(fp){
     S.sus+=SUS_UP*(D.susK||1)*fp*dt*(has('fusuma')?.6:1)*(SV.easy?.5:1); alarmT-=dt;
@@ -2072,7 +2077,8 @@ function render(){
 
 /* 部屋選びのガイド */
 function drawRooms(){
-  const rl=$('rooms'); rl.innerHTML='';
+  const rl=$('rooms'), fr=document.activeElement&&document.activeElement.closest&&document.activeElement.closest('.rbtn')?document.activeElement.dataset.r:null; rl.innerHTML='';
+  if(fr!=null) queueMicrotask(()=>{const b=rl.querySelector(`.rbtn[data-r="${fr}"]`); b&&b.focus({preventScroll:true})});
   if(S.fmode){
     const x0=L.cx-L.sw/2;
     for(let i=0;i<S.rooms;i++) for(const j of [i+1,i+S.cols]){
@@ -2971,8 +2977,8 @@ function showScreen(){
         <div class="failwhy">${why}（${Math.floor(D.time-S.t)}秒）</div>
         <dl class="result"><dt>売上</dt><dd>${S.cr}円</dd><dt>湯仲間ボーナス</dt><dd>${S.stat.chain}回</dd><dt>撃退した山賊</dt><dd>${S.stat.beat}匹</dd></dl>
         <p class="earn">＋${S.earn.toLocaleString()} 小判<small>（宿の改装に使える）</small></p></div>
-        <div class="btnrow resrow"><button class="go" data-go="endless">もう一度</button><button class="go sub" data-go="map">ステージ選択</button></div>`;
-      scr.hidden=false; sc.querySelector('button').focus(); return;
+        <div class="btnrow resrow stick"><button class="go" data-go="endless">もう一度</button><button class="go sub" data-go="map">ステージ選択</button></div>`;
+      scr.hidden=false; focusTop(sc.querySelector('button')); return;
     }
     const title={clear:D.daily?'今日のお題 クリア！':last?'全100ステージ制覇！':`ステージ ${st} クリア！`,short:quotaOk()?'目標に届かず…':'組合ノルマ未達成…',caught:'大ゲンカで大騒動！',abandon:`${S.angry==='A'?'いぬ':'ねこ'}組合が激怒！`}[r];
     const hanko={clear:n===3?'大<br>繁盛':n===2?'繁盛':'合格',short:'無念',caught:'御用',abandon:'破談'}[r];
@@ -3007,9 +3013,9 @@ function showScreen(){
       <dl class="result"><dt>泊まったお客</dt><dd>${S.stat.served}組</dd>${D.tags?`<dt>湯仲間ボーナス</dt><dd>${S.stat.chain}回</dd>`:''}${D.foes?`<dt>撃退した山賊</dt><dd>${S.stat.beat}匹</dd>`:''}</dl>
       <p class="earn">＋${S.earn.toLocaleString()} 小判<small>（宿の改装に使える）</small></p>
       ${chapc}${resultLine(D,r,n)}${achLine(S.newAch||[])}${tip}${ups}</div>
-      <div class="btnrow resrow">${r==='clear'&&last?'<button class="go" data-story="end">最終話を見る</button>':''}${btn}<button class="go sub" data-go="map">ステージ選択</button></div>`;
+      <div class="btnrow resrow stick">${r==='clear'&&last?'<button class="go" data-story="end">最終話を見る</button>':''}${btn}<button class="go sub" data-go="map">ステージ選択</button></div>`;
   }
-  scr.hidden=false; sc.querySelector('button').focus();
+  scr.hidden=false; focusTop(sc.querySelector('button'));
 }
 const UPICON={fusuma:'#i-towel',kanban:'#cat',dango:'#i-meal',pochi:'#dog',maneki:'#vip',bath:'#i-tea',quick:'#clock',nobori:'#koban'};
 function showMap(){
@@ -3025,17 +3031,19 @@ function showMap(){
       <button class="modeb2" data-go="endless" ${endlessOpen()?'':'disabled'}><b>エンドレス</b><small>${endlessOpen()?`ベスト ${SV.best||0}組`:'100面クリアで解放'}</small></button>
       <button class="modeb2" data-go="shop"><b>宿の改装</b><small>小判 ${(SV.bank||0).toLocaleString()}</small></button>
       <button class="modeb2" data-go="dex"><b>お客さん図鑑</b><small>${DEX.filter(d=>SV.dex[d[0]]).length} / ${DEX.length}</small></button>
-      <button class="modeb2 wide" data-go="ach"><b>ごほうび帳</b><small>${ACH.filter(a=>SV.ach[a.k]).length} / ${ACH.length}　着物 ${KIMONO.filter(m=>kimOpen(m.k)).length} / ${KIMONO.length}</small></button>
+      <button class="modeb2 wide" data-go="ach"><b>ごほうび帳</b><small>${ACH.filter(a=>(SV.ach||{})[a.k]).length} / ${ACH.length}　着物 ${KIMONO.filter(m=>kimOpen(m.k)).length} / ${KIMONO.length}</small></button>
     </div>
     <div class="unlock"><span>${next?`あと★${next[1]-STARS}で「${UPS[next[0]].name}」`:SV.unlockAll?'すべて解放中（設定で切りかえ）':'強化はすべて解放済み！'}</span><div class="prog"><i style="width:${pct}%"></i></div></div>
     ${UP_AT.some(u=>has(u[0]))?`<div class="owned">${UP_AT.filter(u=>has(u[0])).map(u=>`<span>${UPS[u[0]].name}</span>`).join('')}</div>`:''}
     <div class="tiles" id="tiles">${tiles}</div>
-    <div class="btnrow"><button class="go" data-stage="${cur}">ステージ ${cur} をあそぶ</button></div>
+    <div class="btnrow stick"><button class="go" data-stage="${cur}">ステージ ${cur} をあそぶ</button></div>
     ${SV.story.length||SV.unlockAll?`<div class="storyrow"><span>ものがたり</span>${STORY.filter(x=>SV.unlockAll||SV.story.includes(x.id)).map(x=>`<button class="schip" data-story="${x.id}">${x.title.split('　')[0]}</button>`).join('')}</div>`:''}`;
   scr.hidden=false;
   const curT=sc.querySelector('.tile.cur'); if(curT){const t=$('tiles');t.scrollTop=curT.offsetTop-t.offsetTop-t.clientHeight/2+curT.clientHeight/2}
-  sc.querySelector('.btnrow .go').focus();
+  focusTop(sc.querySelector('.btnrow .go'));
 }
+// 新しい画面は上から見せる（ボタンへのフォーカスで下までスクロールしないように）
+function focusTop(el){ scr.scrollTop=0; if(el) try{el.focus({preventScroll:true})}catch(e){el.focus()} }
 function titleArt(pk){ return `<svg class="ttl-art" viewBox="0 0 340 262" aria-hidden="true">
         <g class="ttl-steam" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round">
           <path d="M120 40 q-10 -14 0 -28 q10 -14 0 -28"/><path d="M170 34 q10 -14 0 -28 q-10 -14 0 -28" style="animation-delay:-1s"/><path d="M220 40 q-10 -14 0 -28 q10 -14 0 -28" style="animation-delay:-2s"/></g>
@@ -3077,7 +3085,7 @@ function showShop(){
     <div class="shopprev">${titleArt(pk)}</div>
     <div class="shop">${SHOP.map(it=>`<div class="shopc ${own(it.k)?'own':''}"><svg viewBox="0 0 24 24" aria-hidden="true">${it.ico}</svg><div><b>${it.name}</b><small>${it.desc}</small></div>${own(it.k)?'<span class="owned">改装ずみ</span>':`<button class="buy" data-buy="${it.k}" ${(SV.bank||0)<it.cost?'disabled':''}>${it.cost.toLocaleString()}<small>小判</small></button>`}</div>`).join('')}</div>
     <div class="btnrow"><button class="go sub" data-go="map">もどる</button></div>`;
-  scr.hidden=false;
+  scr.hidden=false; scr.scrollTop=0;
 }
 /* ================= お客さん図鑑（第2版） ================= */
 const DEX=[
@@ -3094,7 +3102,7 @@ function showDex(){
   sc.innerHTML=`<p class="h3">お客さん図鑑</p><p class="bankline">見つけた数 <b>${DEX.filter(d=>SV.dex[d[0]]).length} / ${DEX.length}</b><small>10回で銀、50回で金のふち</small></p>
     <div class="dex">${DEX.map(([k,name,sym,vb,badge])=>{const c=SV.dex[k]||0;return `<div class="dexc ${c?rank(c):'none'}"><svg viewBox="0 0 ${vb} ${vb}" aria-hidden="true"><use href="#${sym}"/>${k==='A_v'||k==='B_v'||k==='C_v'?'<use href="#vip"/>':''}${k==='oyabun'?'<use href="#oyabun"/>':''}</svg>${badge?`<i>${badge}</i>`:''}<b>${c?name:'？？？'}</b><small>${c?`×${c}`:'まだ'}</small></div>`}).join('')}</div>
     <div class="btnrow"><button class="go sub" data-go="map">もどる</button></div>`;
-  scr.hidden=false;
+  scr.hidden=false; scr.scrollTop=0;
 }
 
 /* ================= ごほうび帳（第7版）：実績・女将の着物・宿の飾り ================= */
@@ -3124,10 +3132,10 @@ const ACH=[
   {k:'trialall',name:'試練をこえて',desc:'試練の面を10すべてクリア',test:()=>trials()>=10},
   {k:'all100',name:'全100面制覇',desc:'ステージ100をクリア',test:()=>(SV.stars[100]||0)>0,rw:'女将の着物「夜空」'},
   {k:'star50',name:'名宿の女将',desc:'★3を50面でとる',test:()=>star3()>=50,rw:'女将の着物「金襴」'}];
-const deco=k=>k==='furin'?!!SV.ach.trial5:k==='sakura'?!!SV.ach.shopall:false;
+const deco=k=>{const a=SV.ach||{};return k==='furin'?!!a.trial5:k==='sakura'?!!a.shopall:false};
 // 条件を満たした実績を記録し、新しく取れたものを返す
-function checkAch(c){ const nw=[]; for(const a of ACH) if(!SV.ach[a.k]){let ok=false; try{ok=a.test(c)}catch(e){} if(ok){SV.ach[a.k]=1;nw.push(a.k)}} if(nw.length)save(); return nw }
-const kimOpen=k=>{const m=KIMONO.find(x=>x.k===k); return !!m&&(!m.need||!!SV.ach[m.need])};
+function checkAch(c){ SV.ach=SV.ach||{}; const nw=[]; for(const a of ACH) if(!(SV.ach||{})[a.k]){let ok=false; try{ok=a.test(c)}catch(e){} if(ok){(SV.ach||{})[a.k]=1;nw.push(a.k)}} if(nw.length)save(); return nw }
+const kimOpen=k=>{const m=KIMONO.find(x=>x.k===k); return !!m&&(!m.need||!!(SV.ach||{})[m.need])};
 function applyKimono(){ const m=KIMONO.find(x=>x.k===SV.kimono&&kimOpen(x.k))||KIMONO[0];
   document.documentElement.style.setProperty('--kimono',m.col); document.documentElement.style.setProperty('--hana',m.hana) }
 // 一度にたくさん取れたときは、着物・飾りのごほうびを優先して3つまで見せる
@@ -3135,18 +3143,18 @@ const achLine=ks=>{ if(!ks.length) return ''; const o=[...ks].sort((a,b)=>!!ACH.
   return `<div class="achnew">🎖 ごほうび解放！ ${sh.map(k=>{const a=ACH.find(x=>x.k===k);return `<b>「${a.name}」</b>${a.rw?`→ ${a.rw}`:''}`}).join('／')}${o.length>3?`　ほか${o.length-3}つ（ごほうび帳で見られる）`:''}</div>` };
 function showAch(){
   const pk=document.querySelector('.portrait svg').innerHTML;
-  const got=ACH.filter(a=>SV.ach[a.k]).length;
+  const got=ACH.filter(a=>(SV.ach||{})[a.k]).length;
   sc.innerHTML=`<p class="h3">ごほうび帳</p><p class="bankline">ごほうび <b>${got} / ${ACH.length}</b><small>ごほうびを取ると、女将の着物や宿の飾りがふえる</small></p>
     <p class="achh" style="margin-top:2px">女将の着物（タップで着がえ）</p>
     <div class="kimonos">${KIMONO.map(m=>{const op=kimOpen(m.k);return `<button class="kim ${SV.kimono===m.k?'on':''}" data-kimono="${m.k}" ${op?'':'disabled'} aria-label="着物 ${op?m.name:'まだ'}"><svg viewBox="0 0 64 64" style="--kimono:${m.col};--hana:${m.hana}">${pk}</svg>${op?m.name:'？？？'}</button>`}).join('')}</div>
     <p class="achh">ごほうび一覧</p>
-    <div class="ach">${ACH.map(a=>`<div class="achc ${SV.ach[a.k]?'got':''}"><span class="md">${SV.ach[a.k]?'★':'・'}</span><div><b>${a.name}</b><small>${a.desc}</small>${a.rw?`<span class="rw">ごほうび：${a.rw}</span>`:''}</div></div>`).join('')}</div>
+    <div class="ach">${ACH.map(a=>`<div class="achc ${(SV.ach||{})[a.k]?'got':''}"><span class="md">${(SV.ach||{})[a.k]?'★':'・'}</span><div><b>${a.name}</b><small>${a.desc}</small>${a.rw?`<span class="rw">ごほうび：${a.rw}</span>`:''}</div></div>`).join('')}</div>
     <div class="btnrow"><button class="go sub" data-go="map">もどる</button></div>`;
-  scr.hidden=false;
+  scr.hidden=false; scr.scrollTop=0;
 }
 // クリア画面のひとこと（女将ポン子。試練の面は瓦版屋ミミが取材に来る）
 function resultLine(D,r,n){
-  const st=D.n, pick=a=>a[st%a.length];
+  const st=typeof D.n==='number'?D.n:strHash(String(D.dkey||D.n)), pick=a=>a[st%a.length];
   let who='ponko', t, bad=r!=='clear';
   if(r==='clear'&&D.trial&&st>=20&&!D.daily){who='mimi'; t=pick(['試練の面を乗りきったぴょん！ 瓦版の一面はこれで決まりだぴょん。','すごいぴょん！ 今夜の宿のにぎわい、ぜんぶ書きとめたぴょん。','このいそがしさでケンカなし…！ 女将さん、ただ者じゃないぴょん。'])}
   else if(r==='clear'&&n===3) t=pick(['大繁盛！ 今日のお客さん、みんなにこにこでしたね。','お代もたっぷり、お題もばっちり！ 宿の改装、なにからにしましょう？','ぜーんぶ、うまくいきました！ この調子、この調子♪']);
@@ -3327,7 +3335,7 @@ function playStory(st,then){
     <div class="vn-stage"><div class="vn-ch l" id="vnL"></div><div class="vn-ch r" id="vnR"></div></div>
     <div class="vn-box"><span class="vn-name" id="vnName"></span><p class="vn-text" id="vnText"></p><span class="vn-next">▼</span></div>
     <button class="vn-skip" data-go="vnskip">スキップ</button></div>`;
-  scr.hidden=false; showLine();
+  scr.hidden=false; scr.scrollTop=0; showLine();
 }
 function showLine(){
   const [who,text]=VN.st.lines[VN.i], c=CH[who];
@@ -3413,8 +3421,8 @@ function showStageCard(){
   const goal=D.endless?`<div class="goals"><div class="gl-x"><span>時間は<b>無制限</b>。30秒ごとにお客が速く来る。<b>破談か大騒動</b>で終わり。<br>何組泊められるかに挑戦！ 自己ベスト <b>${SV.best||0}組</b></span></div></div>`:goalsHTML(D);
   sc.innerHTML=`<div class="scroll stagecard">${D.chapName&&!D.label?`<p class="chapline">第${D.chap+1}章「${D.chapName}」${D.trial?`<b class="trialtag">試練：${D.trial}</b>`:''}</p>`:''}<p class="rtitle">${D.label||'ステージ '+D.n}<small class="thn th-${D.theme}">${THN[D.theme]}</small>${D.shape?`<small class="thn shp">${D.shape}</small>`:''}</p>${miniMap(D)}
     ${goal}${hintsHTML(D)}</div>
-    <div class="btnrow"><button class="go" data-go="open">開店！</button><button class="go sub" data-go="map">もどる</button></div>`;
-  scr.hidden=false; sc.querySelector('button').focus();
+    <div class="btnrow stick"><button class="go" data-go="open">開店！</button><button class="go sub" data-go="map">もどる</button></div>`;
+  scr.hidden=false; focusTop(sc.querySelector('button'));
 }
 /* ================= チュートリアル（1面・はじめてのとき） ================= */
 const vr=el=>{const b=el.getBoundingClientRect();return {x:b.left,y:b.top,w:b.width,h:b.height}};
@@ -3553,7 +3561,7 @@ $('setDlg').addEventListener('click',e=>{
     reduce=sysReduce||!SV.cfg.fx; save(); sfx('sel'); if(k==='vib'&&SV.cfg.vib)buzz(40); renderSettings(); return}
   if(b.dataset.del){
     if(!delArm){delArm=true;sfx('nope');renderSettings();return}
-    const cfg=SV.cfg; SV={stars:{},seen:[],story:[],easy:false,diff2:1,coach:[],unlockAll:SV.unlockAll,cfg,bank:0,shop:{},dex:{},best:0,daily:{}}; save(); STARS=0; delArm=false;
+    const cfg=SV.cfg; SV={stars:{},seen:[],story:[],easy:false,diff2:1,coach:[],unlockAll:SV.unlockAll,cfg,bank:0,shop:{},dex:{},best:0,daily:{},ach:{},kimono:'fuji'}; save(); STARS=0; delArm=false; applyKimono();
     $('setDlg').hidden=true; S=newGame(); S.scene='title'; showScreen(); return}
 });
 $('setDlg').addEventListener('input',e=>{const k=e.target.dataset.sl;if(!k)return;SV.cfg[k]=+e.target.value;e.target.nextElementSibling.textContent=e.target.value;save()});
@@ -3564,7 +3572,7 @@ function nextRule(){
   const r=pendingRules.shift(); SV.seen.push(r.k); save();
   sc.innerHTML=`<div class="scroll rule"><p class="rtitle">${r.title}</p><svg class="rart" viewBox="0 0 120 68" aria-hidden="true">${r.art}</svg><p class="rtext">${r.text}</p></div>
     <div class="btnrow"><button class="go" data-go="rule">${pendingRules.length?'つぎへ':'はじめる'}</button></div>`;
-  scr.hidden=false; sc.querySelector('button').focus();
+  scr.hidden=false; focusTop(sc.querySelector('button'));
 }
 // ものがたり中は、画面のどこをタップしても次へ進む（文字の箱の外でも）
 scr.addEventListener('click',e=>{ if(VN&&!e.target.closest('#sc')){advanceStory()} });
@@ -3678,6 +3686,7 @@ function toggleFusuma(k){
 $('fsBtn').addEventListener('click',()=>{if(!canAct())return;S.fmode=!S.fmode;S.bmode=false;S.sel=null;sfx('sel');dirty=true});
 $('bkBtn').addEventListener('click',()=>{if(!canAct())return;if(!S.bmode&&S.bstock<=0)return;S.bmode=!S.bmode;S.fmode=false;S.sel=null;sfx('sel');dirty=true});
 $('foes').addEventListener('pointerdown',e=>{const b=e.target.closest('.foe');if(b){e.preventDefault();tapFoe(+b.dataset.id)}});
+$('foes').addEventListener('keydown',e=>{const b=e.target.closest('.foe');if(b&&(e.key==='Enter'||e.key===' ')){e.preventDefault();tapFoe(+b.dataset.id)}});
 $('spBtn').addEventListener('click',special);
 function setPause(p){
   if(!S||S.scene!=='play') return;
@@ -3694,7 +3703,12 @@ function setPause(p){
 }
 $('pauseBtn').addEventListener('click',()=>setPause(!S.paused));
 $('soundBtn').addEventListener('click',()=>{muted=!muted;initAudio();setIcons()});
-document.addEventListener('visibilitychange',()=>{if(document.hidden) setPause(true)});
+document.addEventListener('visibilitychange',()=>{
+  if(document.hidden){ if(!(S&&S.tut)) setPause(true);
+    // 画面を閉じたら音も止める（ロック中に鳴り続けないように）
+    for(const k in TRACKS){const T=TRACKS[k]; if(T.el&&!T.el.paused){T.el.pause(); T.bgPaused=true}} ambStopRain(); try{ac&&ac.suspend()}catch(e){} }
+  else { try{ac&&ac.resume()}catch(e){} for(const k in TRACKS){const T=TRACKS[k]; if(T.bgPaused){T.bgPaused=false; if(T.src){const pr=T.el.play(); pr&&pr.catch&&pr.catch(()=>{T.retry=true})}}} }
+});
 
 new ResizeObserver(()=>{
   stage.classList.add('noanim'); layout(); scenery(); sizeParticles();
