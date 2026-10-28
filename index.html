@@ -360,6 +360,16 @@ svg .kwarn{animation:blink .5s steps(2) infinite alternate}
   font-family:var(--f-display);font-size:clamp(48px,12vw,104px);color:#fff;text-shadow:4px 0 0 var(--ol),-4px 0 0 var(--ol),0 4px 0 var(--ol),0 -4px 0 var(--ol),3px 3px 0 var(--ol),-3px 3px 0 var(--ol),3px -3px 0 var(--ol),-3px -3px 0 var(--ol),0 8px 0 var(--ol);
   animation:tf .9s ease-out forwards}
 .flash.red{color:#ff9c9c}
+.flash.open{z-index:10;color:#ffe08a;animation-duration:1.25s}
+.flash.last{z-index:10;color:#ff6b6b;font-size:clamp(40px,11vw,84px);animation-duration:1.3s}
+.flash.last small{display:block;font-size:.42em;color:#fff;text-align:center}
+.lastcd{position:absolute;left:50%;top:28%;z-index:7;pointer-events:none;transform:translate(-50%,-50%);font-family:var(--f-display);font-size:clamp(70px,22vw,140px);color:#ff5a5a;opacity:0;
+  -webkit-text-stroke:5px var(--ol);paint-order:stroke;animation:lastcd .95s ease-out forwards}
+@keyframes lastcd{0%{opacity:0;transform:translate(-50%,-50%) scale(1.6)}20%{opacity:.85;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-50%) scale(.9)}}
+.stage.lastten::after{content:"";position:absolute;inset:0;z-index:7;pointer-events:none;border-radius:inherit;box-shadow:inset 0 0 0 5px #ff3b3b,inset 0 0 46px #ff3b3b99;animation:lastpulse 1s ease-in-out infinite}
+@keyframes lastpulse{50%{box-shadow:inset 0 0 0 3px #ff3b3b88,inset 0 0 18px #ff3b3b44}}
+.m-time.low{background:#ffe1e1;box-shadow:0 0 0 3px #ff3b3b;animation:beat .5s ease-in-out infinite alternate}
+@media (prefers-reduced-motion:reduce){.stage.lastten::after,.m-time.low,.lastcd{animation:none}.lastcd{opacity:.8}}
 @keyframes tf{0%{opacity:0;transform:scale(1.8)}22%{opacity:1;transform:scale(.95)}32%{transform:scale(1)}100%{opacity:0}}
 .kaze{position:absolute;inset:0;pointer-events:none;z-index:7;background:radial-gradient(circle at 50% 85%,#fff,#ffffffaa 25%,transparent 65%);animation:kaze .7s ease-out forwards}
 @keyframes kaze{from{opacity:1}to{opacity:0}}
@@ -1775,7 +1785,7 @@ function tapRoom(i){
 
 // 湯仲間がつながった部屋を金色にふちどる
 // 開店の合図：のれんが左右にひらく
-function noren(){ if(reduce) return; const d=document.createElement('div'); d.className='noren-open'; d.innerHTML='<i><b>♨</b></i><i><b>宿</b></i>'; stage.appendChild(d); setTimeout(()=>d.remove(),1100) }
+function noren(){ if(reduce) return; const d=document.createElement('div'); d.className='noren-open'; d.innerHTML='<i></i><i></i>'; stage.appendChild(d); setTimeout(()=>d.remove(),1100) }
 function chainFlash(cells){ const rl=$('rooms'); const x0=L.cx-L.sw/2;
   for(const k of cells){ const c=k%L.cols, r=(k/L.cols)|0, d=document.createElement('div'); d.className='chainfl';
     d.style.cssText=`left:${x0+L.bw*c+5}px;top:${L.top+L.bh*r+3}px;width:${L.bw-10}px;height:${L.bh-6}px`; stage.appendChild(d); setTimeout(()=>d.remove(),900) } }
@@ -1828,7 +1838,7 @@ function tick(now){
 function step(dt,speed=1){
   if(S.cd>0){
     const before=Math.ceil(S.cd); S.cd-=dt; const after=Math.ceil(S.cd);
-    if(after!==before){ if(after>0){flash(after);sfx('tick')} else {flash('開店！');sfx('go');noren()} }
+    if(after!==before){ if(after>0){flash(after);sfx('tick')} else {noren();flash('開店！',false,'open');sfx('go')} }
     return;
   }
   if(S.tut&&S.tut.freeze) return; // チュートリアル中は時間を止める
@@ -1958,6 +1968,11 @@ function frame(){
   $('hTime').textContent=`${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`;
   $('hTimeBar').style.width=(S.t/D.time*100)+'%';
   $('mTime').classList.toggle('low',S.t<=10&&S.cd<=0&&S.scene==='play');
+  { const last=S.t<=10&&S.t>0&&S.cd<=0&&S.scene==='play'&&!S.paused&&!DAYS[S.day].endless; stage.classList.toggle('lastten',last);
+    // 残り10秒になった瞬間に大きく知らせ、5秒からは数字を出す
+    if(last){ const sec=Math.ceil(S.t); if(S.lastSec==null){flash('のこり10秒！<small>いそいで案内しよう</small>',false,'last');sfx('alarm');buzz(120)}
+      else if(sec!==S.lastSec&&sec<=5){const d=document.createElement('div');d.className='lastcd';d.textContent=sec;fxEl.appendChild(d);setTimeout(()=>d.remove(),1000);sfx('tick')}
+      S.lastSec=sec } else if(S.t>10) S.lastSec=null; }
   if(S.crShow==null)S.crShow=S.cr; const df=S.cr-S.crShow; S.crShow=Math.abs(df)<1?S.cr:S.crShow+Math.sign(df)*Math.max(1,Math.abs(df)*.12);
   $('hCr').innerHTML=D.endless?`${Math.round(S.crShow)}<small>円</small>`:`${Math.round(S.crShow)}<small>/ ${tgt(D)}円</small>`;
   $('hCrBar').style.width=(D.endless?0:Math.min(100,S.cr/tgt(D)*100))+'%';
@@ -2483,7 +2498,7 @@ function pop(text,x,y,cls=''){
   const d=document.createElement('div');d.className='pop '+cls;d.textContent=text;x=Math.max(70,Math.min((L.w||400)-70,x));d.style.left=x+'px';d.style.top=y+'px';
   fxEl.appendChild(d);setTimeout(()=>d.remove(),1300);
 }
-function flash(t,red){const d=document.createElement('div');d.className='flash'+(red?' red':'');d.textContent=t;fxEl.appendChild(d);setTimeout(()=>d.remove(),950)}
+function flash(t,red,cls){const d=document.createElement('div');d.className='flash'+(red?' red':'')+(cls?' '+cls:'');if(cls==='last')d.innerHTML=`<span>${t}</span>`;else d.textContent=t;fxEl.appendChild(d);setTimeout(()=>d.remove(),cls?1350:950)}
 
 /* ================= 効果音 ================= */
 let VOLK=1, ac=null, sfxOut=null, sfxVerb=null, noiseBuf=null, lad=0, ladT=0;
@@ -3433,7 +3448,7 @@ function tutNext(){
   do{T.i++}while(TUT[T.i]&&TUT[T.i].skip&&TUT[T.i].skip());
   document.querySelector('.tut')?.remove();
   const st=TUT[T.i];
-  if(!st){S.tut=null;SV.tut1=1;save();S.spawnT={A:.6,B:1.6};flash('開店！');sfx('go');dirty=true;return}
+  if(!st){S.tut=null;SV.tut1=1;save();S.spawnT={A:.6,B:1.6};flash('開店！',false,'open');sfx('go');dirty=true;return}
   if(st.pre) st.pre(); dirty=true;
   setTimeout(()=>tutDraw(),T.i===0?120:750); // お客が部屋へ移動し終えてから指さす
 }
