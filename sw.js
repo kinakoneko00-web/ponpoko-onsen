@@ -1,5 +1,5 @@
 // ぽんぽこ温泉宿：一度開いたら電波がなくても起動できるように、ページと音源を保存する
-const CACHE='ponpoko-v7cb';
+const CACHE='ponpoko-v7c';
 const FILES=['./','manifest.webmanifest','icon-192.png','icon-512.png','bgm/hanagoyomi2-96.mp3','bgm/michikusa.ogg','bgm/michikusa-96.mp3','bgm/michikusa3-96.mp3','bgm/shizima3.mp3'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>Promise.allSettled(FILES.map(f=>c.add(f)))).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
