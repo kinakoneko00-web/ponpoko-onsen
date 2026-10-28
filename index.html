@@ -113,6 +113,9 @@ svg .kimono{fill:var(--kimono,#6a4c8c)} svg .hana{fill:var(--hana,#e5393e)}
 .chapclear{position:relative;margin:4px auto 2px;padding:6px 18px;border-radius:8px;background:linear-gradient(#fff3c8,#ffd76a);box-shadow:0 0 0 2.5px #7a4a12,0 3px 0 2.5px #7a4a12;font-family:var(--f-wa);font-size:15px;color:#5a3006;animation:stampin .5s 1.25s both}
 .chapclear small{display:block;font-family:inherit;font-size:11px;color:#8a5a16}
 @keyframes stampin{0%{opacity:0;transform:scale(2.2) rotate(-8deg)}70%{opacity:1;transform:scale(.94) rotate(1deg)}100%{transform:none}}
+.adbtn{display:flex;flex-direction:column;align-items:center;gap:1px;width:100%;margin:8px 0 2px;padding:9px 12px;border:0;border-radius:12px;background:linear-gradient(#3fbf6a,#2a9a50);color:#fff;box-shadow:0 0 0 2.5px #1d1630,0 3px 0 2.5px #1d1630;font-family:var(--f-wa)}
+.adbtn b{font-size:15px;letter-spacing:.04em}.adbtn small{font-size:11.5px;font-weight:800;opacity:.92}
+.adbtn:disabled{filter:grayscale(.7);opacity:.6}
 .achh{margin:8px 0 4px;font-family:var(--f-wa);font-size:13px;color:#f3e3b8;letter-spacing:.05em}
 .achnew{color:var(--ink);width:100%;margin:6px 0 0;padding:7px 10px;border-radius:10px;background:#fff7dc;box-shadow:0 0 0 2px #e9b33a;font-size:12.5px;font-weight:800;text-align:left;animation:rlin .45s 1.5s both}
 .achnew b{color:#b06a00}
@@ -1664,6 +1667,8 @@ function startDay(){
     foes:[],foeT:7,bossDone:false,atkT:1.5,pochiT:2,raidN:0,raidT:0,sp:S.sp||0,ev:null,leak:null,
     evQ:pickEvents(D),rtag:Array.from({length:D.cols*D.floors},()=>D.scroll?TAGS[Math.random()*3|0]:null)});
   for(const o of els.values()){o.el.remove();o.rq&&o.rq.remove()} els.clear();
+  // 広告を見た「助けつき再挑戦」：次の1回だけ時間＋10秒・ふすま＋1
+  if(AD_HELP&&AD_HELP.day===S.day&&!D.endless){S.t+=10;if(D.fusuma)S.fstock+=1;S.helped=true} AD_HELP=null;
   // 前の面の一時停止・吹き出しの残りを片づける
   stage.querySelectorAll('.paused,.coach').forEach(e=>e.remove()); document.querySelector('.tut')?.remove(); hint=null; stage.classList.remove('lastten','rainy');
   for(const o of foeEls.values()) o.el.remove(); foeEls.clear();
@@ -1965,7 +1970,7 @@ function endDay(result){
     S.newAch=checkAch({nofight:result==='clear'&&!D.endless&&!D.daily&&n>=11&&S.stat.fights===0,double:result==='clear'&&!D.endless&&S.cr>=tgt(D)*2});
     if(S.newAch.some(k=>KIMONO.some(m=>m.need===k))) applyKimono();
     save(); }
-  S.history[S.day]={cr:S.cr,result};
+  S.history[S.day]={cr:S.cr,result}; ADS.cnt++;
   sfx(result==='clear'?'win':'lose');
   flash(result==='clear'?'閉店！':result==='caught'?'大騒動！':result==='abandon'?'組合が激怒！':'閉店…',result==='caught'||result==='abandon');
   dirty=true;
@@ -2819,7 +2824,7 @@ try{
   if(!document.querySelector('link[rel=manifest]')) add('link',{rel:'manifest',href:'manifest.webmanifest'});
   add('link',{rel:'apple-touch-icon',href:'icon-192.png'});
   add('meta',{name:'theme-color',content:'#1e2740'}); add('meta',{name:'apple-mobile-web-app-capable',content:'yes'});
-  if('serviceWorker' in navigator&&location.protocol==='https:') navigator.serviceWorker.register('sw.js').catch(()=>{});
+  if('serviceWorker' in navigator&&location.protocol==='https:'&&!(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform())) navigator.serviceWorker.register('sw.js').catch(()=>{}); // アプリ版では使わない
 }catch(e){}
 addEventListener('touchend',onUserTap,{passive:true});
 addEventListener('click',onUserTap,{passive:true});
@@ -2998,7 +3003,7 @@ function showScreen(){
         ${nb?'<span class="newrec">自己ベスト更新！</span>':`<p class="note">自己ベスト ${SV.best}組</p>`}
         <div class="failwhy">${why}（${Math.floor(D.time-S.t)}秒）</div>
         <dl class="result"><dt>売上</dt><dd>${S.cr}円</dd><dt>湯仲間ボーナス</dt><dd>${S.stat.chain}回</dd><dt>撃退した山賊</dt><dd>${S.stat.beat}匹</dd></dl>
-        <p class="earn">＋${S.earn.toLocaleString()} 小判<small>（宿の改装に使える）</small></p></div>
+        <p class="earn">＋${S.earn.toLocaleString()} 小判<small>（宿の改装に使える）</small></p>${adBtnHTML('clear')}</div>
         <div class="btnrow resrow stick"><button class="go" data-go="endless">もう一度</button><button class="go sub" data-go="map">ステージ選択</button></div>`;
       scr.hidden=false; focusTop(sc.querySelector('button')); return;
     }
@@ -3034,7 +3039,7 @@ function showScreen(){
       <h2 class="${r==='caught'||r==='abandon'?'R':''}">${title}</h2>
       <dl class="result"><dt>泊まったお客</dt><dd>${S.stat.served}組</dd>${D.tags?`<dt>湯仲間ボーナス</dt><dd>${S.stat.chain}回</dd>`:''}${D.foes?`<dt>撃退した山賊</dt><dd>${S.stat.beat}匹</dd>`:''}</dl>
       <p class="earn">＋${S.earn.toLocaleString()} 小判<small>（宿の改装に使える）</small></p>
-      ${chapc}${resultLine(D,r,n)}${achLine(S.newAch||[])}${tip}${ups}</div>
+      ${chapc}${adBtnHTML(r==='clear'?'clear':'fail')}${resultLine(D,r,n)}${achLine(S.newAch||[])}${tip}${ups}</div>
       <div class="btnrow resrow stick">${r==='clear'&&last?'<button class="go" data-story="end">最終話を見る</button>':''}${btn}<button class="go sub" data-go="map">ステージ選択</button></div>`;
   }
   scr.hidden=false; focusTop(sc.querySelector('button'));
@@ -3184,6 +3189,81 @@ function resultLine(D,r,n){
     const tw=D.tw||{}; if(tw.kouji)c.push('工事のトンカチの音、お客さんにはないしょです。'); if(tw.rain)c.push('雨もり、なんとかしのぎました…！'); if(tw.moon)c.push('満月の夜は、化け術がもたなくてドキドキします。'); if(tw.fast)c.push('せっかちなお客さん、はやく案内できてよかった！'); t=pick(c)}
   else t=r==='caught'?pick(['あわわ…ケンカになっちゃいました。次は間をあけて…！','壁かふすま、もっと使えばよかったかも…。']):r==='abandon'?pick(['お客さんを待たせすぎちゃいました…。','満室のときは、お帰りいただくのも手ですね…。']):pick(['あとちょっと…！ もうひとがんばりです。','おしい！ つぎはもっとお代をいただきましょう。']);
   return `<div class="rline${bad?' bad':''}"><div class="rf">${CH[who].svg()}</div><p><small>${CH[who].name}</small>${t}</p></div>`;
+}
+
+/* ================= 広告（第9版：アプリ版だけ。Web版では何もしない） ================= */
+// 広告IDはアプリを作るときに GitHub の設定から入る。未設定ならGoogleのテスト用ID
+const AD_CFG={rewarded:'__ADMOB_REWARDED_ID__',inter:'__ADMOB_INTERSTITIAL_ID__'};
+const AD_TEST={rewarded:'ca-app-pub-3940256099942544/5224354917',inter:'ca-app-pub-3940256099942544/1033173712'};
+const IS_APP=!!(window.Capacitor&&typeof Capacitor.isNativePlatform==='function'&&Capacitor.isNativePlatform());
+const AD_EVERY=3, AD_GAP=180000, AD_FROM=5; // 全画面広告：3面ごと・3分以上あけて・ステージ5から
+const ADS={on:false,rw:false,it:false,busy:false,cnt:0,last:0,privacy:false,test:true,plug:null,got:false,done:null};
+const adId=k=>{const v=AD_CFG[k];return v&&!v.startsWith('__')?v:AD_TEST[k]};
+async function adsInit(){
+  if(!IS_APP) return;
+  try{
+    const A=ADS.plug=(Capacitor.Plugins&&Capacitor.Plugins.AdMob)||Capacitor.registerPlugin('AdMob');
+    ADS.test=AD_CFG.rewarded.startsWith('__');
+    // 同意が必要な地域（ヨーロッパなど）では、最初に同意の画面を出す
+    let info=await A.requestConsentInfo();
+    if(info.isConsentFormAvailable&&info.status==='REQUIRED') info=await A.showConsentForm();
+    ADS.privacy=info.privacyOptionsRequirementStatus==='REQUIRED';
+    if(!info.canRequestAds) return;
+    await A.initialize({maxAdContentRating:'ParentalGuidance',tagForChildDirectedTreatment:false,tagForUnderAgeOfConsent:false});
+    ADS.on=true;
+    // ごほうび広告の約束（Promise）は、ごほうびを得たときしか返ってこないので、閉じたことは「閉じた」知らせで受け取る
+    A.addListener('onRewardedVideoAdReward',()=>{ADS.got=true});
+    const fin=()=>{const d=ADS.done;ADS.done=null;d&&d()};
+    for(const ev of ['onRewardedVideoAdDismissed','onRewardedVideoAdFailedToShow','interstitialAdDismissed','interstitialAdFailedToShow']) A.addListener(ev,fin);
+    A.addListener('onRewardedVideoAdFailedToLoad',()=>{ADS.rw=false;refreshAdBtns();setTimeout(()=>adLoad('rw'),30000)});
+    A.addListener('interstitialAdFailedToLoad',()=>{ADS.it=false;setTimeout(()=>adLoad('it'),30000)});
+    adLoad('rw'); adLoad('it');
+  }catch(e){ADS.on=false}
+}
+async function adLoad(k){
+  if(!ADS.on) return;
+  try{ if(k==='rw'){await ADS.plug.prepareRewardVideoAd({adId:adId('rewarded'),isTesting:ADS.test});ADS.rw=true;refreshAdBtns()}
+       else{await ADS.plug.prepareInterstitial({adId:adId('inter'),isTesting:ADS.test});ADS.it=true} }catch(e){}
+}
+// 広告を見ている間は、曲も効果音も止める
+function adQuiet(on){
+  ADS.busy=on;
+  if(on){ADS.wasMuted=muted;muted=true;try{for(const k in TRACKS){const T=TRACKS[k];if(T.el&&!T.el.paused){T.el.pause();T.adPaused=true}}ambStopRain();ac&&ac.suspend()}catch(e){}}
+  else{muted=ADS.wasMuted;try{ac&&ac.resume();for(const k in TRACKS){const T=TRACKS[k];if(T.adPaused){T.adPaused=false;if(T.src){const pr=T.el.play();pr&&pr.catch&&pr.catch(()=>{})}}}}catch(e){}}
+}
+function adShow(kind){
+  return new Promise(res=>{
+    if(!ADS.on||ADS.busy||(kind==='rw'?!ADS.rw:!ADS.it)){res(false);return}
+    adQuiet(true); ADS.got=false;
+    const to=setTimeout(()=>{if(ADS.done){ADS.done=null;end()}},120000);
+    const end=()=>{clearTimeout(to);adQuiet(false);ADS.last=Date.now();ADS.cnt=0;
+      if(kind==='rw'){ADS.rw=false;adLoad('rw')}else{ADS.it=false;adLoad('it')} res(kind==='rw'?ADS.got:true)};
+    ADS.done=end;
+    (kind==='rw'?ADS.plug.showRewardVideoAd():ADS.plug.showInterstitial()).then(r=>{if(kind==='rw'&&r)ADS.got=true}).catch(()=>{if(ADS.done){ADS.done=null;end()}});
+  });
+}
+// 結果画面から先へ進むとき、条件がそろったら全画面広告をはさむ
+async function adBreak(){
+  if(!ADS.on||!S||S.adSeen) return;
+  if(ADS.cnt<AD_EVERY||Date.now()-ADS.last<AD_GAP||(typeof S.day==='number'&&S.day+1<AD_FROM&&!DAYS[S.day].daily&&!DAYS[S.day].endless)) return;
+  await adShow('it');
+}
+// ごほうび広告のボタン（クリア：小判2倍／失敗：助けつきで再挑戦）
+function adBtnHTML(r){
+  if(!ADS.on||S.adSeen) return '';
+  if(r==='clear') return S.earn>0?`<button class="adbtn" data-ad="coin" ${ADS.rw?'':'disabled'}><b>▶ 広告を見て 小判2倍</b><small>${ADS.rw?`＋${S.earn.toLocaleString()} 小判`:'広告を読みこみ中…'}</small></button>`:'';
+  if(DAYS[S.day].endless) return '';
+  return `<button class="adbtn" data-ad="help" ${ADS.rw?'':'disabled'}><b>▶ 広告を見て 助けつきで再挑戦</b><small>${ADS.rw?`時間＋10秒${DAYS[S.day].fusuma?'・ふすま＋1':''}（次の1回だけ）`:'広告を読みこみ中…'}</small></button>`;
+}
+function refreshAdBtns(){ const b=sc.querySelector('.adbtn'); if(!b) return; b.outerHTML=adBtnHTML(S.result==='clear'?'clear':'fail') }
+let AD_HELP=null; // 次の挑戦だけ使える助け {day}
+async function onAdBtn(kind){
+  const ok=await adShow('rw'); S.adSeen=true;
+  if(!ok){const b=sc.querySelector('.adbtn'); if(b) b.remove(); return}
+  if(kind==='coin'){SV.bank=(SV.bank||0)+S.earn; S.earn*=2; save(); sfx('coin2'); confetti();
+    const e=sc.querySelector('.earn'); if(e) e.innerHTML=`＋${S.earn.toLocaleString()} 小判<small>（広告で2倍！）</small>`;
+    sc.querySelector('.adbtn')?.remove()}
+  else {AD_HELP={day:S.day}; sfx('special'); startStage(S.day+1)}
 }
 /* ================= ストーリー ================= */
 const CH={
@@ -3561,8 +3641,9 @@ function renderSettings(){
       ${sw('easy',SV.easy,'やさしいモード','時間がゆっくり・目標が少しやさしい')}
       ${sw('vib',c.vib,'ふるえる（バイブ）','ケンカや撃退でスマホがふるえる')}
       ${sw('fx',c.fx,'ゆれ・きらきら演出','オフにすると画面のゆれや粒が出ない')}
-      ${sw('all',!!SV.unlockAll,'すべて解放','全ステージ・強化・ものがたりを最初から使える')}</div>
+      ${IS_APP?'':sw('all',!!SV.unlockAll,'すべて解放','全ステージ・強化・ものがたりを最初から使える')}</div>
     <div class="sgrp"><p class="sh">あそびかた</p><button class="srowbtn" data-tut="1">🔰 チュートリアルをもう一度<span>›</span></button><button class="srowbtn" data-cv="rules">📖 ルール説明をもう一度見る<span>›</span></button><button class="srowbtn" data-op="1">🎬 オープニングをもう一度見る<span>›</span></button></div>
+    ${ADS.privacy?'<div class="sgrp"><p class="sh">広告</p><button class="srowbtn" data-adpriv="1">🛡 広告のプライバシー設定<span>›</span></button></div>':''}
     <div class="sgrp"><p class="sh">データ</p><button class="srowbtn danger ${delArm?'arm':''}" data-del="1">${delArm?'本当に消す？（もう一度タップ）':'🗑 セーブデータを消す'}<span>›</span></button></div>
     <p class="credit">BGM：<a href="https://peritune.com/" target="_blank" rel="noopener">PeriTune</a>「Michikusa」「Michikusa3」「Hanagoyomi2」「Shizima3」</p>
     <button class="go" data-close="1">とじる</button>`;
@@ -3576,6 +3657,7 @@ $('setDlg').addEventListener('click',e=>{
   if(e.target.id==='setDlg'){closeSettings();return}
   const b=e.target.closest('button'); if(!b) return;
   if(b.dataset.close){sfx('sel');closeSettings();return}
+  if(b.dataset.adpriv){sfx('sel');try{ADS.plug.showPrivacyOptionsForm().catch(()=>{})}catch(e){}return}
   if(b.dataset.tut){sfx('sel');SV.tut1=0;save();$('setDlg').hidden=true;document.querySelector('.tut')?.remove();if(S){S.paused=false;stage.querySelector('.paused')?.remove()}startStage(1);return}
   if(b.dataset.cv){sfx('sel');cfgView=b.dataset.cv;renderSettings();return}
   if(b.dataset.op){sfx('sel');$('setDlg').hidden=true;const back=S&&S.scene==='map'?showMap:S&&S.scene==='title'?showScreen:null;playOpening(()=>{if(back)back()});return}
@@ -3603,6 +3685,9 @@ sc.addEventListener('click',e=>{
   initAudio(); ac&&ac.resume&&ac.resume();
   if(e.target.closest('#vn')&&!e.target.closest('[data-go="vnskip"]')){advanceStory();return}
   const so=e.target.closest('[data-story]'); if(so){const st=STORY.find(x=>x.id===so.dataset.story);playStory(st,()=>{S&&S.scene==='result'?showScreen():showMap()});return}
+  const ab=e.target.closest('[data-ad]'); if(ab&&!ab.disabled){sfx('sel');ab.disabled=true;onAdBtn(ab.dataset.ad);return}
+  // 結果画面から先へ進むとき、条件がそろえば全画面広告
+  if(ADS.on&&S&&S.scene==='result'&&!scr.hidden&&!e.__ad&&e.target.closest('.resrow [data-stage],.resrow [data-go],.resrow [data-story]')&&ADS.cnt>=AD_EVERY){const t=e.target;e.stopImmediatePropagation();adBreak().then(()=>{S.adSeen=true;const ev=new MouseEvent('click',{bubbles:true});ev.__ad=1;t.dispatchEvent(ev)});return}
   const km=e.target.closest('[data-kimono]'); if(km&&!km.disabled){SV.kimono=km.dataset.kimono;save();applyKimono();sfx('sel');showAch();return}
   const by=e.target.closest('[data-buy]'); if(by&&!by.disabled){buyShop(by.dataset.buy);return}
   const t=e.target.closest('[data-stage]'); if(t&&!t.disabled){sfx('sel');startStage(+t.dataset.stage);return}
@@ -3739,11 +3824,31 @@ new ResizeObserver(()=>{
   requestAnimationFrame(()=>requestAnimationFrame(()=>stage.classList.remove('noanim')));
 }).observe(stage);
 
+/* ================= アプリ版（Android）の起動 ================= */
+function appInit(){
+  if(!IS_APP) return;
+  document.documentElement.classList.add('app');
+  adsInit();
+  try{
+    const App=(Capacitor.Plugins&&Capacitor.Plugins.App)||Capacitor.registerPlugin('App');
+    // Androidの「戻る」：遊び中は一時停止、各画面からはステージ選択へ、タイトルではアプリを閉じる
+    App.addListener('backButton',()=>{ try{
+      if(ADS.busy) return;
+      if(!$('setDlg').hidden){closeSettings();return}
+      if(OP){endOpening();return}
+      if(VN){clearInterval(VN.timer);const t=VN.then;VN=null;t();return}
+      if(S&&S.scene==='play'&&scr.hidden){setPause(!S.paused);return}
+      if(!S||S.scene==='title'){App.exitApp();return}
+      if(S.scene==='map'){S.scene='title';showScreen();return}
+      document.querySelector('.tut')?.remove(); S.tut=null; S.scene='map'; showMap();
+    }catch(e){} });
+  }catch(e){}
+}
 /* ================= 起動 ================= */
 function start(data){
   S=(data&&data.S&&data.S.v===VER)?data.S:newGame();
   if(S.scene==='rule') S.scene='map';
-  applyKimono(); layout(); scenery(); sizeParticles(); drawInn(); setIcons(); dirty=true;
+  appInit(); applyKimono(); layout(); scenery(); sizeParticles(); drawInn(); setIcons(); dirty=true;
   if(S.scene!=='play') showScreen(); else setPause(true);
   requestAnimationFrame(t=>{last=t;requestAnimationFrame(tick)});
 }

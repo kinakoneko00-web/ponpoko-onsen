@@ -1,5 +1,5 @@
 // ぽんぽこ温泉宿：一度開いたら電波がなくても起動できるように、ページと音源を保存する
-const CACHE='ponpoko-v8';
+const CACHE='ponpoko-v9';
 // 最初に保存するのはページとタイトル・遊び中の曲だけ（約2MB）。ほかの曲は一度流れたときに保存する
 const FILES=['./','manifest.webmanifest','icon-192.png','icon-512.png','bgm/hanagoyomi2-96.mp3','bgm/michikusa-96.mp3'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>Promise.allSettled(FILES.map(f=>c.add(f)))).then(()=>self.skipWaiting()))});
