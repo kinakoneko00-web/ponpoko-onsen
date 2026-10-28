@@ -1,7 +1,7 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>ぽんぽこ温泉宿</title><meta name="description" content="たぬき女将ポン子の温泉宿で、いぬとねこをとなりにしないように泊めるパズル。全100ステージ・スマホでそのまま遊べます。"><meta property="og:type" content="website"><meta property="og:site_name" content="ぽんぽこ温泉宿"><meta property="og:title" content="ぽんぽこ温泉宿 ― となりにしたら、ケンカ！"><meta property="og:description" content="たぬき女将ポン子の温泉宿で、いぬとねこをとなりにしないように泊めるパズル。全100ステージ・スマホでそのまま遊べます。"><meta property="og:url" content="https://kinakoneko00-web.github.io/ponpoko-onsen/"><meta property="og:image" content="https://kinakoneko00-web.github.io/ponpoko-onsen/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"></head><body><title>ぽんぽこ温泉宿</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>ぽんぽこ温泉宿</title><meta name="description" content="たぬき女将ポン子の温泉宿で、いぬとねこをとなりにしないように泊めるパズル。全100ステージ・スマホでそのまま遊べます。"><meta property="og:type" content="website"><meta property="og:site_name" content="ぽんぽこ温泉宿"><meta property="og:title" content="ぽんぽこ温泉宿 ― となりにしたら、ケンカ！"><meta property="og:description" content="たぬき女将ポン子の温泉宿で、いぬとねこをとなりにしないように泊めるパズル。全100ステージ・スマホでそのまま遊べます。"><meta property="og:url" content="https://kinakoneko00-web.github.io/ponpoko-onsen/"><meta property="og:image" content="https://kinakoneko00-web.github.io/ponpoko-onsen/og.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"></head><body><title>ぽんぽこ温泉宿</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Kaisei+Decol:wght@700&family=Zen+Maru+Gothic:wght@500;700;900&family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Kaisei+Decol:wght@700&family=Zen+Maru+Gothic:wght@500;700;900&display=swap">
 <style>
 /* Layout: 漆塗りの木枠で囲んだ1画面ゲーム。上に札型のHUD、中央に夕暮れの温泉街ステージ（左:いぬの待合 / 中央:旅館 / 右:ねこの待合）、下に女将の会話巻物と「大喝」ボタン。単一の世界観なので固定配色 */
 :root{
@@ -49,7 +49,7 @@ button:focus-visible{outline:3px solid var(--gold-l);outline-offset:2px}
 .m-cr.done .bar i{background:linear-gradient(90deg,#3f9a3b,#9be68f)}
 .m-sus .val{color:#ff9c9c}
 .m-sus .bar i{background:repeating-linear-gradient(135deg,var(--alarm) 0 6px,#ff7b7f 6px 12px)}
-.m-sus.hot{animation:hot .45s ease-in-out infinite alternate}
+.m-sus.hot::after{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;box-shadow:inset 0 0 0 2px var(--alarm),inset 0 0 18px #e5393e88;animation:opblink2 .45s ease-in-out infinite alternate;will-change:opacity}
 @keyframes hot{to{box-shadow:inset 0 0 0 2px var(--alarm),inset 0 0 18px #e5393e88,0 3px 0 #120905}}
 @keyframes beat{to{transform:scale(1.08)}}
 .icons{display:flex;flex-direction:column;gap:6px}
@@ -85,6 +85,7 @@ button:focus-visible{outline:3px solid var(--gold-l);outline-offset:2px}
 .inn .fightr{animation:blink .45s ease-in-out infinite alternate}
 .inn .chainr{filter:drop-shadow(0 0 6px #ffe08a)}
 @keyframes blink{to{opacity:.25}}
+@keyframes opblink{50%{opacity:.45}} @keyframes opblink2{from{opacity:.25}to{opacity:1}}
 
 /* ===== 第7版：ごほうび帳・着物・クリア演出 ===== */
 svg .kimono{fill:var(--kimono,#6a4c8c)} svg .hana{fill:var(--hana,#e5393e)}
@@ -148,7 +149,8 @@ svg .kwarn{animation:blink .5s steps(2) infinite alternate}
 .guest.docked{pointer-events:auto;cursor:pointer}
 .guest.docked .pbar{width:70%;height:6px;background:#00000055;box-shadow:0 0 0 1.5px var(--ol)}
 .guest.docked .pbar i{background:linear-gradient(90deg,#c88a1a,var(--gold-l))}
-.guest.kickable .art{animation:kick .4s ease-in-out infinite alternate}
+.guest.kickable .art{filter:drop-shadow(0 0 3px var(--alarm))}
+.guest.kickable::before{content:'';position:absolute;inset:-4px;border-radius:12px;pointer-events:none;background:radial-gradient(closest-side,#e5393e66,transparent);animation:opblink2 .4s ease-in-out infinite alternate;will-change:opacity}
 @keyframes kick{to{filter:drop-shadow(0 0 6px var(--alarm)) drop-shadow(0 0 2px var(--alarm))}}
 
 /* 時間帯の空気感 */
@@ -193,7 +195,7 @@ svg .kwarn{animation:blink .5s steps(2) infinite alternate}
 .conf{position:fixed;top:-12px;z-index:40;width:10px;height:15px;border-radius:2px;pointer-events:none;animation:conf 2s ease-in forwards}
 @keyframes conf{to{transform:translate(var(--dx),105vh) rotate(var(--r))}}
 .go:active,.tool-btn:active,.sp:active,.ibtn:active,.tile:active,.upc:active,.modeb:active,.kickbtn:active,.req:active{transform:scale(.92)!important;transition:transform .08s}
-.m-cr .bar i,.m-sus .bar i,.m-time .bar i{transition:width .3s ease-out}
+.m-cr .bar i,.m-sus .bar i,.m-time .bar i{transition:transform .3s ease-out}
 
 /* 化け術 */
 .pop.doron{color:#fff;font-size:24px;text-shadow:0 0 0 #fff,2px 0 0 #2e5a1a,-2px 0 0 #2e5a1a,0 2px 0 #2e5a1a,0 -2px 0 #2e5a1a,0 4px 0 #2e5a1a}
@@ -348,7 +350,7 @@ svg .kwarn{animation:blink .5s steps(2) infinite alternate}
 .pop.sad{font-family:var(--f-body);font-weight:800;font-size:14px;color:#fff}
 .pop.hitp{color:#fff;font-size:22px}
 .pop.ally{font-size:16px;color:#c8ffb8}
-@keyframes pop{0%{opacity:0;margin-top:12px;scale:.6}15%{opacity:1;margin-top:0;scale:1.1}25%{scale:1}100%{opacity:0;margin-top:-52px}}
+@keyframes pop{0%{opacity:0;translate:0 12px;scale:.6}15%{opacity:1;translate:0 0;scale:1.1}25%{scale:1}100%{opacity:0;translate:0 -52px}}
 .banner{position:absolute;left:50%;top:10px;transform:translateX(-50%);z-index:5;white-space:nowrap;
   font-weight:800;font-size:15px;padding:4px 26px;clip-path:polygon(0 0,100% 0,calc(100% - 12px) 50%,100% 100%,0 100%,12px 50%)}
 .banner.mixb{background:var(--alarm);color:#fff;animation:blink .45s ease-in-out infinite alternate}
@@ -366,7 +368,7 @@ svg .kwarn{animation:blink .5s steps(2) infinite alternate}
 .lastcd{position:absolute;left:50%;top:28%;z-index:7;pointer-events:none;transform:translate(-50%,-50%);font-family:var(--f-display);font-size:clamp(70px,22vw,140px);color:#ff5a5a;opacity:0;
   -webkit-text-stroke:5px var(--ol);paint-order:stroke;animation:lastcd .95s ease-out forwards}
 @keyframes lastcd{0%{opacity:0;transform:translate(-50%,-50%) scale(1.6)}20%{opacity:.85;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-50%) scale(.9)}}
-.stage.lastten::after{content:"";position:absolute;inset:0;z-index:7;pointer-events:none;border-radius:inherit;box-shadow:inset 0 0 0 5px #ff3b3b,inset 0 0 46px #ff3b3b99;animation:lastpulse 1s ease-in-out infinite}
+.stage.lastten::after{content:"";position:absolute;inset:0;z-index:7;pointer-events:none;border-radius:inherit;box-shadow:inset 0 0 0 5px #ff3b3b,inset 0 0 46px #ff3b3b99;animation:opblink 1s ease-in-out infinite;will-change:opacity}
 @keyframes lastpulse{50%{box-shadow:inset 0 0 0 3px #ff3b3b88,inset 0 0 18px #ff3b3b44}}
 .m-time.low{background:#ffe1e1;box-shadow:0 0 0 3px #ff3b3b;animation:beat .5s ease-in-out infinite alternate}
 @media (prefers-reduced-motion:reduce){.stage.lastten::after,.m-time.low,.lastcd{animation:none}.lastcd{opacity:.8}}
@@ -410,7 +412,7 @@ svg .kwarn{animation:blink .5s steps(2) infinite alternate}
 .sp small{font-size:11px;font-weight:800}
 .sp.ready{animation:ready .55s ease-in-out infinite alternate}
 .sp.ready .core{background:radial-gradient(circle at 50% 30%,#ff7b5a,var(--ver) 55%,var(--ver-d));color:#fff;text-shadow:0 2px 0 #0006}
-@keyframes ready{to{transform:scale(1.07);box-shadow:0 0 0 3px var(--ol),0 0 22px #ffe08a,0 4px 0 #120905}}
+@keyframes ready{to{transform:scale(1.07)}}
 
 /* ---------- タイトル・結果 ---------- */
 [hidden]{display:none!important}
@@ -638,7 +640,7 @@ button:focus-visible{outline-color:#fff}
 :root{--navy:#1e2740;--navy-2:#2b3658;--cream:#f8f2e2;--pop-y:#e9a91f;--pop-o:#cf4a2a;--pop-b:#2e4f94;
   --paper:#f8f2e2;--ink:#1e2740;--muted:#7b6f5c;--ol:#1e2740;--ver:#cf4a2a;--ver-d:#9a3018;--dog:#d9682c;--dog-d:#a8461a;--cat:#2e4f94;--cat-d:#1f3a73;
   --f-wa:"Kaisei Decol","Zen Maru Gothic","Hiragino Mincho ProN",serif;
-  --f-body:"Zen Maru Gothic","M PLUS Rounded 1c","Hiragino Maru Gothic ProN",system-ui,sans-serif}
+  --f-body:"Zen Maru Gothic","Hiragino Maru Gothic ProN",system-ui,sans-serif}
 body{background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%2740%27%20height%3D%2720%27%20viewBox%3D%270%200%2040%2020%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23ffffff%27%20stroke-opacity%3D%27.07%27%20stroke-width%3D%271.4%27%3E%3Cpath%20d%3D%27M0%2020a20%2020%200%200%201%2040%200M6%2020a14%2014%200%200%201%2028%200M12%2020a8%208%200%200%201%2016%200M-20%2010a20%2020%200%200%201%2040%200M-14%2010a14%2014%200%200%201%2028%200M-8%2010a8%208%200%200%201%2016%200M20%2010a20%2020%200%200%201%2040%200M26%2010a14%2014%200%200%201%2028%200M32%2010a8%208%200%200%201%2016%200%27/%3E%3C/g%3E%3C/svg%3E") 0 0/40px 20px,var(--navy)}
 .screen{background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%2740%27%20height%3D%2720%27%20viewBox%3D%270%200%2040%2020%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23ffffff%27%20stroke-opacity%3D%27.08%27%20stroke-width%3D%271.4%27%3E%3Cpath%20d%3D%27M0%2020a20%2020%200%200%201%2040%200M6%2020a14%2014%200%200%201%2028%200M12%2020a8%208%200%200%201%2016%200M-20%2010a20%2020%200%200%201%2040%200M-14%2010a14%2014%200%200%201%2028%200M-8%2010a8%208%200%200%201%2016%200M20%2010a20%2020%200%200%201%2040%200M26%2010a14%2014%200%200%201%2028%200M32%2010a8%208%200%200%201%2016%200%27/%3E%3C/g%3E%3C/svg%3E") 0 0/40px 20px,radial-gradient(circle at 0% 100%,#cf4a2a55,transparent 45%),radial-gradient(circle at 100% 0%,#2e4f9488,transparent 50%),var(--navy)}
 .screen:has(.ttl){background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%2740%27%20height%3D%2720%27%20viewBox%3D%270%200%2040%2020%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23ffffff%27%20stroke-opacity%3D%27.16%27%20stroke-width%3D%271.4%27%3E%3Cpath%20d%3D%27M0%2020a20%2020%200%200%201%2040%200M6%2020a14%2014%200%200%201%2028%200M12%2020a8%208%200%200%201%2016%200M-20%2010a20%2020%200%200%201%2040%200M-14%2010a14%2014%200%200%201%2028%200M-8%2010a8%208%200%200%201%2016%200M20%2010a20%2020%200%200%201%2040%200M26%2010a14%2014%200%200%201%2028%200M32%2010a8%208%200%200%201%2016%200%27/%3E%3C/g%3E%3C/svg%3E") 0 0/40px 20px,linear-gradient(112deg,#e07a3a 0,#c9532a 49.4%,#f8f2e2 49.4%,#f8f2e2 50.6%,#3a5ea8 50.6%,#1f3a73 100%)}
@@ -754,6 +756,7 @@ body{background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/
 /* 中身が画面より高いとき、上が切れずにスクロールで全部見られるように */
 .screen:not([hidden]){display:flex;flex-direction:column;align-items:center}
 .screen>.sc{margin-block:auto;flex:none}
+.stage.covered,.stage.covered *,.stage.covered *::before,.stage.covered *::after{animation-play-state:paused!important}
 .screen .btnrow.stick{position:sticky;bottom:0;z-index:3;padding:10px 0 calc(8px + env(safe-area-inset-bottom));margin-bottom:-8px;background:linear-gradient(transparent,rgba(20,14,40,.85) 38%)}
 .lane-tag.warn{transform:scale(1.14);transform-origin:50% 100%;background:#c8321e!important;animation:warnshake .5s ease-in-out infinite!important;z-index:4}
 @keyframes warnshake{0%,100%{rotate:0deg}25%{rotate:-3deg}75%{rotate:3deg}}
@@ -838,7 +841,8 @@ body{background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/
 .guest.queued .art{scale:1.12!important;transform-origin:50% 100%}
 .lane-tag .lf i{opacity:1!important;color:#0000003d!important}
 .guest.queued .angerm{display:none!important}
-.guest.queued.hurry{background:#ffdcd6;box-shadow:0 0 0 3px #e5393e;animation:hurryq .5s ease-in-out infinite alternate}
+.guest.queued.hurry{background:#ffdcd6;box-shadow:0 0 0 3px #e5393e}
+.guest.queued.hurry::after{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;box-shadow:0 0 0 3px #e5393e,0 0 12px #ff8a7a;animation:opblink2 .5s ease-in-out infinite alternate;will-change:opacity}
 @keyframes hurryq{to{box-shadow:0 0 0 3px #e5393e,0 0 12px #ff8a7a}}
 .lane-tag .lf .dots{display:flex;flex-wrap:wrap;gap:2px}
 .lane-tag .lf u{display:block;width:6px;height:6px;border-radius:50%;background:#0000003a;box-shadow:inset 0 0 0 1px #fff6}
@@ -1005,10 +1009,11 @@ div.owned{display:none!important}
 /* タイトル：順番に出てくる */
 .ttl{position:relative;overflow:hidden}
 .ttl>*{position:relative;z-index:1}
-.ttl-rays{position:absolute!important;z-index:0!important;left:50%;top:26%;width:220vmax;height:220vmax;translate:-50% -50%;background:repeating-conic-gradient(from 0deg,#ffffff1c 0 10deg,transparent 10deg 20deg);border-radius:50%;pointer-events:none;animation:tr-in .9s .25s ease-out both,oprays 30s linear infinite}
+.ttl-rays{position:absolute!important;z-index:0!important;left:50%;top:26%;width:220vmax;height:220vmax;translate:-50% -50%;background:repeating-conic-gradient(from 0deg,#ffffff1c 0 10deg,transparent 10deg 20deg);border-radius:50%;pointer-events:none;animation:tr-in .9s .25s ease-out both,oprays 30s linear infinite;will-change:transform,rotate,opacity}
 @keyframes tr-in{from{opacity:0;scale:.3}}
 .ttl.intro .ttl-pill{animation:tdrop .45s .05s cubic-bezier(.3,1.6,.5,1) both}
 @keyframes tdrop{from{translate:0 -60px;opacity:0}}
+.ttl.intro .ttl-logo,.ttl.intro .ttl-tap{will-change:transform,opacity}
 .ttl.intro .ttl-logo{animation:tslam .55s .3s cubic-bezier(.2,1.6,.4,1) both,noren 3.2s 1.2s ease-in-out infinite}
 @keyframes tslam{from{scale:2.6;opacity:0}}
 .ttl.intro .ttl-art{animation:trise .6s .95s cubic-bezier(.3,1.4,.5,1) both}
@@ -1067,14 +1072,15 @@ div.owned{display:none!important}
 /* 演出 */
 .chainfl{position:absolute;z-index:4;border-radius:6px;pointer-events:none;box-shadow:inset 0 0 0 4px #ffd84a,0 0 22px #ffd84a;animation:chainfl .9s ease-out forwards}
 @keyframes chainfl{0%{opacity:0;transform:scale(.9)}25%{opacity:1;transform:scale(1.03)}100%{opacity:0;transform:scale(1)}}
-.rainfx{position:absolute;inset:0;z-index:2;pointer-events:none;opacity:0;transition:opacity .8s;border-radius:inherit;
-  background:repeating-linear-gradient(105deg,transparent 0 31px,rgba(210,230,255,.5) 31px 32.5px,transparent 32.5px 61px),repeating-linear-gradient(98deg,transparent 0 47px,rgba(210,230,255,.35) 47px 48px,transparent 48px 83px);
-  background-size:61px 140px,83px 190px;animation:rainmv .5s linear infinite}
+.rainfx{position:absolute;inset:0;z-index:2;pointer-events:none;opacity:0;transition:opacity .8s;border-radius:inherit;overflow:hidden}
+.rainfx::before,.rainfx::after{content:'';position:absolute;left:-90px;top:-200px;right:-90px;bottom:-200px;will-change:transform}
+.rainfx::before{background:repeating-linear-gradient(105deg,transparent 0 31px,rgba(210,230,255,.5) 31px 32.5px,transparent 32.5px 61px);background-size:61px 140px;animation:rain1 .5s linear infinite}
+.rainfx::after{background:repeating-linear-gradient(98deg,transparent 0 47px,rgba(210,230,255,.35) 47px 48px,transparent 48px 83px);background-size:83px 190px;animation:rain2 .5s linear infinite}
 .stage.rainy .rainfx{opacity:.55}
-@keyframes rainmv{to{background-position:-38px 140px,-27px 190px}}
-@media (prefers-reduced-motion:reduce){.rainfx{animation:none}}
+@keyframes rain1{to{transform:translate(-61px,140px)}} @keyframes rain2{to{transform:translate(-83px,190px)}}
+@media (prefers-reduced-motion:reduce){.rainfx::before,.rainfx::after{animation:none}}
 .tensefx{display:none;position:absolute;inset:0;z-index:7;pointer-events:none;border-radius:inherit}
-.stage.tense .tensefx{display:block;box-shadow:inset 0 0 40px 10px #e5393e99;animation:tense .85s ease-in-out infinite}
+.stage.tense .tensefx{display:block;box-shadow:inset 0 0 40px 10px #e5393e99;animation:opblink .85s ease-in-out infinite;will-change:opacity}
 @keyframes tense{50%{box-shadow:inset 0 0 18px 4px #e5393e55}}
 .noren-open{position:absolute;inset:0;z-index:9;pointer-events:none;display:flex}
 .noren-open i{flex:1;background:repeating-linear-gradient(90deg,#2b3a7a 0 30px,#24326a 30px 32px);display:grid;place-items:center;font-style:normal;animation:norenL .9s .15s cubic-bezier(.6,0,.4,1) forwards}
@@ -1827,6 +1833,7 @@ const fesOf=f=>S.ev&&((S.ev.k==='catfes'&&f==='B')||(S.ev.k==='dogfes'&&f==='A')
 
 /* ================= ゲームループ ================= */
 let last=0, hint=null, alarmT=0, dirty=true;
+function coverSync(){const c=!scr.hidden; if(c!==coverSync.v){coverSync.v=c; stage.classList.toggle('covered',c)} return c}
 function tick(now){
   const dt=Math.min(.05,(now-last)/1000||0); last=now;
   requestAnimationFrame(tick);
@@ -1836,7 +1843,9 @@ function tick(now){
     stage.classList.toggle('slow',!!slow);
     if(hitStopT>0){hitStopT-=dt}
     else if(running) step(dt,(SV.easy?.75:1)*(slow?.3:1));
-    particles(running?dt:0);
+    // 画面（タイトル・メニュー・結果）が宿をおおっている間は、宿の動きを止めて描かない
+    const covered=coverSync();
+    if(!covered&&(running||!particles.still)) particles(running?dt:0); particles.still=!running;
     frame(); bgmSync(); ambTick(); tutTick(); coachCheck(now);
   }catch(err){console.error(err)}
 }
@@ -1965,13 +1974,18 @@ function endDay(result){
 
 /* ================= 毎フレームの描画 ================= */
 const $=id=>document.getElementById(id);
+// 画面の文字や棒は、値が変わったときだけ書きかえる（毎フレーム書くと再計算が走って重くなる）
+function setH(el,v){if(el&&el.__h!==v){el.__h=v;el.innerHTML=v}}
+function setT(el,v){v=String(v);if(el&&el.__t!==v){el.__t=v;el.textContent=v}}
+// 棒の長さは幅ではなく拡大率で変える（幅を変えると画面全体の配置計算がやり直しになる）
+function setW(el,p){if(!el)return;p=Math.max(0,Math.min(100,Math.round(p*2)/2));if(el.__w!==p){if(el.__w===undefined){el.style.width='100%';el.style.transformOrigin='0 50%'}el.__w=p;el.style.transform=`scaleX(${p/100})`}}
 function frame(){
   if(!S||!S.q) return;
   const D=DAYS[S.day];
   if(dirty){render();dirty=false}
   const sec=D.endless?Math.floor(D.time-S.t):Math.ceil(S.t);
-  $('hTime').textContent=`${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`;
-  $('hTimeBar').style.width=(S.t/D.time*100)+'%';
+  setT($('hTime'),`${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`);
+  setW($('hTimeBar'),S.t/D.time*100);
   $('mTime').classList.toggle('low',S.t<=10&&S.cd<=0&&S.scene==='play');
   { const last=S.t<=10&&S.t>0&&S.cd<=0&&S.scene==='play'&&!S.paused&&!DAYS[S.day].endless; stage.classList.toggle('lastten',last);
     // 残り10秒になった瞬間に大きく知らせ、5秒からは数字を出す
@@ -1979,41 +1993,41 @@ function frame(){
       else if(sec!==S.lastSec&&sec<=5){const d=document.createElement('div');d.className='lastcd';d.textContent=sec;fxEl.appendChild(d);setTimeout(()=>d.remove(),1000);sfx('tick')}
       S.lastSec=sec } else if(S.t>10) S.lastSec=null; }
   if(S.crShow==null)S.crShow=S.cr; const df=S.cr-S.crShow; S.crShow=Math.abs(df)<1?S.cr:S.crShow+Math.sign(df)*Math.max(1,Math.abs(df)*.12);
-  $('hCr').innerHTML=D.endless?`${Math.round(S.crShow)}<small>円</small>`:`${Math.round(S.crShow)}<small>/ ${tgt(D)}円</small>`;
-  $('hCrBar').style.width=(D.endless?0:Math.min(100,S.cr/tgt(D)*100))+'%';
+  setH($('hCr'),D.endless?`${Math.round(S.crShow)}<small>円</small>`:`${Math.round(S.crShow)}<small>/ ${tgt(D)}円</small>`);
+  setW($('hCrBar'),D.endless?0:Math.min(100,S.cr/tgt(D)*100));
   $('mCr').classList.toggle('done',S.cr>=tgt(D));
-  $('hSus').textContent=Math.floor(S.sus)+'%';
-  $('hSusBar').style.width=S.sus+'%';
+  setT($('hSus'),Math.floor(S.sus)+'%');
+  {const e=$('hSusBar'),v=Math.round(S.sus);if(e.__sw!==v){e.__sw=v;e.style.width=v+'%'}} // しま模様がつぶれないよう、ケンカ度だけは幅で変える
   $('mSus').classList.toggle('hot',mixed());
-  { if(!stage.querySelector('.rainfx')){const r=document.createElement('div');r.className='rainfx';innSvg.after(r)}
+  { if(!frame.rf){frame.rf=stage.querySelector('.rainfx')} if(!frame.rf||!frame.rf.isConnected){const r=document.createElement('div');r.className='rainfx';innSvg.after(r)}
     stage.classList.toggle('rainy',S.scene==='play'&&!!(DAYS[S.day].tw&&DAYS[S.day].tw.rain)); }
   { const dz=S.sus>=70; if(!stage.querySelector('.tensefx')){const t=document.createElement('div');t.className='tensefx';stage.appendChild(t)} stage.classList.toggle('tense',dz&&S.scene==='play');
     if(dz&&S.scene==='play'&&!S.paused){ const t=performance.now(); if(!S.hbT||t-S.hbT>850){S.hbT=t; if(ac&&!muted&&SV.cfg.se>0){sfxBus();VOLK=SV.cfg.se/80;const u=ac.currentTime;taiko(u,{v:.32,f:58,d:.3});taiko(u+.18,{v:.22,f:52,d:.3})}} }
     $('mSus').classList.toggle('danger',dz); if(dz&&!S.susWarn&&S.scene==='play'){sfx('alarm');buzz(150)} S.susWarn=dz; }
   for(const f of ['A','B']) for(const s of S.q[f]){
     const o=els.get(s.id); if(!o) continue;
-    o.bar.style.width=(s.pat/s.patMax*100)+'%';
+    setW(o.bar,s.pat/s.patMax*100);
     o.el.classList.toggle('hurry',s.pat<s.patMax*.35);
   }
-  for(const s of guests()){const o=els.get(s.id); if(!o) continue; o.bar.style.width=((1-s.left/s.leftMax)*100)+'%';
-    if(o.rq&&s.req){const r=s.req.t/s.req.tMax;o.rqRing.style.strokeDashoffset=91.1*(1-r);o.rq.classList.toggle('late',r<.35)}}
+  for(const s of guests()){const o=els.get(s.id); if(!o) continue; setW(o.bar,(1-s.left/s.leftMax)*100);
+    if(o.rq&&s.req){const r=s.req.t/s.req.tMax;{const v=Math.round(91.1*(1-r));if(o.rqRing.__v!==v){o.rqRing.__v=v;o.rqRing.style.strokeDashoffset=v}}o.rq.classList.toggle('late',r<.35)}}
   // 満月：化け術がとける少し前からゆらゆらさせて知らせる
   for(const s of [...S.q.A,...S.q.B,...guests()]){const o=els.get(s.id); if(o) o.el.classList.toggle('melt',!!(s.disg&&s.dT!=null&&s.dT<MELT_WARN))}
   for(const f of ['A','B']){
     const n=S.stat.byF[f], lf=S.stat.lostF[f], mx=LM();
-    const nq=$('nq'+f); nq.innerHTML=D.endless?`<small>お泊り</small>${n}組`:`<small>お泊り</small>${n}/${normOf(D,f)}`; nq.classList.toggle('ok',!D.endless&&n>=normOf(D,f));
-    $('lf'+f).innerHTML='<em>不満</em><span class="dots">'+'<u class="on"></u>'.repeat(lf)+'<u></u>'.repeat(Math.max(0,mx-lf))+'</span>';
+    const nq=$('nq'+f); setH(nq,D.endless?`<small>お泊り</small>${n}組`:`<small>お泊り</small>${n}/${normOf(D,f)}`); nq.classList.toggle('ok',!D.endless&&n>=normOf(D,f));
+    setH($('lf'+f),'<em>不満</em><span class="dots">'+'<u class="on"></u>'.repeat(lf)+'<u></u>'.repeat(Math.max(0,mx-lf))+'</span>');
     const wn=lf>=mx-2, tg=document.querySelector('.lane-tag.'+f); tg.classList.toggle('warn',wn);
     S.warnF=S.warnF||{}; if(wn&&!S.warnF[f]&&S.scene==='play'){sfx('alarm');buzz(120)} S.warnF[f]=wn;
   }
   drawFoes();
-  if(S.ev){const e=$('evBar');if(e)e.style.width=(S.ev.t/S.ev.tMax*100)+'%'}
-  {const m=mission(),el=$('mis');el.innerHTML=`お題：${m.txt}<b>${m.prog}</b>`;el.className='mis'+(m.ok?' ok':m.prog==='失敗'?' ng':'');}
-  {const bb=$('bkBtn');bb.classList.toggle('on',!!S.bmode);$('bkTxt').textContent=S.bmode?'やめる':`化け術 ${S.bstock}`;bb.disabled=!S.bmode&&S.bstock<=0;}
-  const fb=$('fsBtn'); fb.classList.toggle('on',!!S.fmode); $('fsTxt').textContent=S.fmode?'やめる':`ふすま ${S.fstock}`; fb.disabled=!S.fmode&&S.fstock<=0;
+  if(S.ev){const e=$('evBar');if(e)setW(e,S.ev.t/S.ev.tMax*100)}
+  {const m=mission(),el=$('mis');setH(el,`お題：${m.txt}<b>${m.prog}</b>`);const c='mis'+(m.ok?' ok':m.prog==='失敗'?' ng':'');if(el.className!==c)el.className=c;}
+  {const bb=$('bkBtn');bb.classList.toggle('on',!!S.bmode);setT($('bkTxt'),S.bmode?'やめる':`化け術 ${S.bstock}`);bb.disabled=!S.bmode&&S.bstock<=0;}
+  const fb=$('fsBtn'); fb.classList.toggle('on',!!S.fmode); setT($('fsTxt'),S.fmode?'やめる':`ふすま ${S.fstock}`); fb.disabled=!S.fmode&&S.fstock<=0;
   const spb=$('spBtn');
-  spb.style.setProperty('--p',S.sp/SPMAX*100);
-  $('spTxt').textContent=S.sp>=SPMAX?'使える！':`${S.sp}/${SPMAX}`;
+  if(spb.__p!==S.sp){spb.__p=S.sp;spb.style.setProperty('--p',S.sp/SPMAX*100)}
+  setT($('spTxt'),S.sp>=SPMAX?'使える！':`${S.sp}/${SPMAX}`);
   spb.classList.toggle('ready',S.sp>=SPMAX);
 }
 
@@ -2160,6 +2174,7 @@ function drawInn(){
   const eY=top+2, rY=top-L.roofH, base=top+H+6;
   const fr=new Set(), chainR=new Set();
   if(S&&S.room&&S.cols===cols){fightPairs().forEach(([a,b])=>{fr.add(a);fr.add(b)});S.room.forEach((g,i)=>{if(g&&runLen(i)>=2)chainR.add(i)})}
+  let d=''; // 遊び中に変わるもの（部屋の色・ケンカ・工事・雨もり・湯仲間・ふすま）は別の層に描く
   let s=`<defs>
     <linearGradient id="gRoof" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5d6a8c"/><stop offset="1" stop-color="#2b3250"/></linearGradient>
     <linearGradient id="gWall" x1="0" x2="1"><stop offset="0" stop-color="#3e2214"/><stop offset=".5" stop-color="#5e3620"/><stop offset="1" stop-color="#3e2214"/></linearGradient>
@@ -2205,7 +2220,7 @@ function drawInn(){
     // 部屋：明るい壁面＋畳の床だけのすっきりした見た目
     s+=`<rect class="shoji" x="${rx}" y="${ry}" width="${rw}" height="${rh}" rx="3" fill="url(#gRoom)"/>`;
     { const g=S&&S.room&&S.cols===cols?S.room[i]:null; // 泊まっているお客の種類で部屋を色分け（いぬ＝橙、ねこ＝青、うさぎ＝緑）
-      if(g){const col={A:'#ff7a2a',B:'#2f5af0',C:'#3fae55'}[look(g)]; s+=`<rect x="${rx}" y="${ry}" width="${rw}" height="${rh*.74}" rx="3" fill="${col}" opacity=".32"/><rect x="${rx}" y="${ry+rh-5}" width="${rw}" height="5" fill="${col}"/>`} }
+      if(g){const col={A:'#ff7a2a',B:'#2f5af0',C:'#3fae55'}[look(g)]; d+=`<rect x="${rx}" y="${ry}" width="${rw}" height="${rh*.74}" rx="3" fill="${col}" opacity=".32"/>`} }
     s+=`<rect x="${rx}" y="${ry+rh*.74}" width="${rw}" height="${rh*.26}" fill="#cdbb72"/>`;
     s+=`<path d="M${rx+rw*.5} ${ry+rh*.74} v${rh*.26}" stroke="#a8964e" stroke-width="1.2"/>`;
     s+=`<rect x="${rx}" y="${ry+rh*.74}" width="${rw}" height="2" fill="#8a7a3a"/>`;
@@ -2214,18 +2229,18 @@ function drawInn(){
       s+=`<g><rect x="${kx-1}" y="${ky-2}" width="${kw+2}" height="3" rx="1" fill="#5a321a"/><rect x="${kx}" y="${ky}" width="${kw}" height="${kh}" fill="#f4ecd6" stroke="#5a321a" stroke-width="1.2"/>
         <use href="#t-${S.rtag[i]}" x="${kx+1}" y="${ky+kh/2-kw/2+1}" width="${kw-2}" height="${kw-2}"/><rect x="${kx-1}" y="${ky+kh-1}" width="${kw+2}" height="3" rx="1" fill="#5a321a"/></g>`}
     if(S&&(S.closed||[]).includes(i)){ const k=Math.min(14,rh*.22,rw*.18);
-      s+=`<rect x="${rx}" y="${ry}" width="${rw}" height="${rh}" fill="#3a2216" opacity=".55"/><g stroke="#1d1630" stroke-width="2"><rect x="${rx+4}" y="${ry+rh*.42}" width="${rw-8}" height="${rh*.16}" fill="#ffcf3a"/></g>`;
-      for(let x=rx+6;x<rx+rw-10;x+=16) s+=`<path d="M${x} ${ry+rh*.58} l8 ${-rh*.16} h6 l-8 ${rh*.16}z" fill="#1d1630"/>`;
-      s+=`<text x="${mx}" y="${ry+rh*.32}" text-anchor="middle" font-family="Dela Gothic One, sans-serif" font-size="${k}" fill="#fff" stroke="#1d1630" stroke-width="3" paint-order="stroke">工事中</text>`; }
+      d+=`<rect x="${rx}" y="${ry}" width="${rw}" height="${rh}" fill="#3a2216" opacity=".55"/><g stroke="#1d1630" stroke-width="2"><rect x="${rx+4}" y="${ry+rh*.42}" width="${rw-8}" height="${rh*.16}" fill="#ffcf3a"/></g>`;
+      for(let x=rx+6;x<rx+rw-10;x+=16) d+=`<path d="M${x} ${ry+rh*.58} l8 ${-rh*.16} h6 l-8 ${rh*.16}z" fill="#1d1630"/>`;
+      d+=`<text x="${mx}" y="${ry+rh*.32}" text-anchor="middle" font-family="Dela Gothic One, sans-serif" font-size="${k}" fill="#fff" stroke="#1d1630" stroke-width="3" paint-order="stroke">工事中</text>`; }
     if(S&&S.kNext&&S.kNext.includes(i)&&!(S.closed||[]).includes(i)){ const k=Math.min(13,rh*.2,rw*.17);
-      s+=`<g class="kwarn"><rect x="${rx+2}" y="${ry+2}" width="${rw-4}" height="${rh-4}" fill="#ffcf3a" fill-opacity=".18" stroke="#ffcf3a" stroke-width="3" stroke-dasharray="7 5"/>
+      d+=`<g class="kwarn"><rect x="${rx+2}" y="${ry+2}" width="${rw-4}" height="${rh-4}" fill="#ffcf3a" fill-opacity=".18" stroke="#ffcf3a" stroke-width="3" stroke-dasharray="7 5"/>
         <text x="${mx}" y="${ry+rh*.34}" text-anchor="middle" font-family="Dela Gothic One, sans-serif" font-size="${k}" fill="#ffcf3a" stroke="#1d1630" stroke-width="3" paint-order="stroke">もうすぐ工事 ${Math.max(1,Math.ceil(S.kT))}</text></g>`; }
     if(S&&S.leak===i){
-      s+=`<rect x="${rx}" y="${ry}" width="${rw}" height="${rh}" fill="#3d5f9a" opacity=".55"/>`;
-      for(let d=0;d<4;d++){const dx=rx+rw*(.2+d*.2), dy=ry+rh*(.15+(d%2)*.25);s+=`<path d="M${dx} ${dy} q-3 5 0 7 q3 -2 0 -7 Z" fill="#9fd4ff" stroke="#1e3a6a" stroke-width=".8" class="drip"/>`}
-      s+=`<text x="${mx}" y="${ry+rh*.62}" text-anchor="middle" font-family="Dela Gothic One, sans-serif" font-size="${Math.min(14,rh*.26,rw*.2)}" fill="#fff" stroke="#1e3a6a" stroke-width="3" paint-order="stroke">雨もり</text>`;
+      d+=`<rect x="${rx}" y="${ry}" width="${rw}" height="${rh}" fill="#3d5f9a" opacity=".55"/>`;
+      for(let q=0;q<4;q++){const dx=rx+rw*(.2+q*.2), dy=ry+rh*(.15+(q%2)*.25);d+=`<path d="M${dx} ${dy} q-3 5 0 7 q3 -2 0 -7 Z" fill="#9fd4ff" stroke="#1e3a6a" stroke-width=".8" class="drip"/>`}
+      d+=`<text x="${mx}" y="${ry+rh*.62}" text-anchor="middle" font-family="Dela Gothic One, sans-serif" font-size="${Math.min(14,rh*.26,rw*.2)}" fill="#fff" stroke="#1e3a6a" stroke-width="3" paint-order="stroke">雨もり</text>`;
     }
-    if(fr.has(i)||chainR.has(i)) s+=`<rect x="${rx}" y="${ry}" width="${rw}" height="${rh}" fill="none" stroke="${fr.has(i)?'#e5393e':'#ffcf3a'}" stroke-width="4" class="${fr.has(i)?'fightr':'chainr'}"/>`;
+    if(fr.has(i)||chainR.has(i)) d+=`<rect x="${rx}" y="${ry}" width="${rw}" height="${rh}" fill="none" stroke="${fr.has(i)?'#e5393e':'#ffcf3a'}" stroke-width="4" class="${fr.has(i)?'fightr':'chainr'}"/>`;
   }
   for(let r=1;r<=fl;r++){const y=top+bh*r;s+=`<rect x="${x0-6}" y="${y-3}" width="${sw+12}" height="6" fill="#3a2010"/>`}
   for(let c=0;c<=cols;c++){const x=x0+bw*c;s+=`<rect x="${x-4.5}" y="${top}" width="9" height="${H+6}" fill="#2e180c"/>`}
@@ -2233,7 +2248,7 @@ function drawInn(){
     for(let i=0;i<S.rooms;i++) for(const j of [i+1,i+cols]){
       if(j>=S.rooms||(j===i+1&&i%cols===cols-1)||blocked(i,j)||!link(S.room[i],S.room[j])) continue;
       const c=i%cols,r=(i/cols)|0, v=j===i+1, x=v?x0+bw*(c+1):x0+bw*(c+.5)+bw*.3, y=v?top+bh*(r+.5):top+bh*(r+1);
-      s+=`<g class="knot"><rect x="${x-(v?13:6)}" y="${y-(v?6:13)}" width="${v?26:12}" height="${v?12:26}" rx="6" fill="#ffcf3a" stroke="#8a5a12" stroke-width="1.5"/><circle cx="${x}" cy="${y}" r="3.2" fill="#fff6c8" stroke="#8a5a12" stroke-width="1"/></g>`;
+      d+=`<g class="knot"><rect x="${x-(v?13:6)}" y="${y-(v?6:13)}" width="${v?26:12}" height="${v?12:26}" rx="6" fill="#ffcf3a" stroke="#8a5a12" stroke-width="1.5"/><circle cx="${x}" cy="${y}" r="3.2" fill="#fff6c8" stroke="#8a5a12" stroke-width="1"/></g>`;
     }
   }
   if(S&&S.walls&&S.cols===cols){
@@ -2244,16 +2259,16 @@ function drawInn(){
       const cx=g.v?g.x:g.x+bw/2, cy=g.v?g.y+bh/2:g.y, br=Math.min(11,(g.v?bh:bw)*.12);
       s+=g.v?`<g class="wall"><rect x="${g.x-9}" y="${g.y-3}" width="22" height="${bh+10}" rx="5" fill="#1d1630" opacity=".35"/><rect x="${g.x-11}" y="${g.y-6}" width="22" height="${bh+12}" rx="5" fill="#ffffff" stroke="#1d1630" stroke-width="3.5"/>`
             :`<g class="wall"><rect x="${g.x-3}" y="${g.y-7}" width="${bw+10}" height="22" rx="5" fill="#1d1630" opacity=".35"/><rect x="${g.x-6}" y="${g.y-11}" width="${bw+12}" height="22" rx="5" fill="#ffffff" stroke="#1d1630" stroke-width="3.5"/>`;
-      s+=`<circle cx="${cx}" cy="${cy}" r="${br}" fill="#1d1630"/><text x="${cx}" y="${cy+br*.36}" text-anchor="middle" font-size="${br*1.05}" font-weight="900" fill="#fff" font-family="M PLUS Rounded 1c,sans-serif">壁</text></g>`}
+      s+=`<circle cx="${cx}" cy="${cy}" r="${br}" fill="#1d1630"/><text x="${cx}" y="${cy+br*.36}" text-anchor="middle" font-size="${br*1.05}" font-weight="900" fill="#fff" font-family="Zen Maru Gothic,sans-serif">壁</text></g>`}
     for(const k of S.fus||[]){const g=seg(k);
       // ふすま：壁と同じ太さ・紺ぶち、水色の和紙＋「ふすま」バッジ
       const cx=g.v?g.x:g.x+bw/2, cy=g.v?g.y+bh/2:g.y, fs=Math.min(10,(g.v?bh:bw)*.11), pw=fs*3.8, ph=fs*1.8;
       const low=(S.fusT[k]??FUS_TIME)<=5;
-      s+=g.v?`<g class="fus${low?' low':''}"><rect x="${g.x-9}" y="${g.y-3}" width="22" height="${bh+10}" rx="5" fill="#1d1630" opacity=".35"/><rect x="${g.x-11}" y="${g.y-6}" width="22" height="${bh+12}" rx="5" fill="#bfe0ff" stroke="#1d1630" stroke-width="3.5"/>
+      d+=g.v?`<g class="fus${low?' low':''}"><rect x="${g.x-9}" y="${g.y-3}" width="22" height="${bh+10}" rx="5" fill="#1d1630" opacity=".35"/><rect x="${g.x-11}" y="${g.y-6}" width="22" height="${bh+12}" rx="5" fill="#bfe0ff" stroke="#1d1630" stroke-width="3.5"/>
           <path d="M${g.x-11} ${g.y+bh*.22} q5.5 -4 11 0 t11 0 M${g.x-11} ${g.y+bh*.78} q5.5 -4 11 0 t11 0" fill="none" stroke="#3f5fe0" stroke-width="2"/>`
             :`<g class="fus${low?' low':''}"><rect x="${g.x-3}" y="${g.y-7}" width="${bw+10}" height="22" rx="5" fill="#1d1630" opacity=".35"/><rect x="${g.x-6}" y="${g.y-11}" width="${bw+12}" height="22" rx="5" fill="#bfe0ff" stroke="#1d1630" stroke-width="3.5"/>
           <path d="M${g.x+bw*.18} ${g.y-11} q-4 5.5 0 11 t0 11 M${g.x+bw*.82} ${g.y-11} q-4 5.5 0 11 t0 11" fill="none" stroke="#3f5fe0" stroke-width="2"/>`;
-      s+=`<rect x="${cx-pw/2}" y="${cy-ph/2}" width="${pw}" height="${ph}" rx="${ph/2}" fill="#3f5fe0" stroke="#1d1630" stroke-width="2"/><text x="${cx}" y="${cy+fs*.36}" text-anchor="middle" font-size="${fs}" font-weight="900" fill="#fff" font-family="M PLUS Rounded 1c,sans-serif">${Math.max(0,Math.ceil(S.fusT[k]??FUS_TIME))}秒</text></g>`}
+      d+=`<rect x="${cx-pw/2}" y="${cy-ph/2}" width="${pw}" height="${ph}" rx="${ph/2}" fill="#3f5fe0" stroke="#1d1630" stroke-width="2"/><text x="${cx}" y="${cy+fs*.36}" text-anchor="middle" font-size="${fs}" font-weight="900" fill="#fff" font-family="Zen Maru Gothic,sans-serif">${Math.max(0,Math.ceil(S.fusT[k]??FUS_TIME))}秒</text></g>`}
   }
   // 玄関の庇とのれん
   const pw=sw*.5;
@@ -2295,7 +2310,10 @@ function drawInn(){
       <ellipse cx="${lx-3.5}" cy="${ly-5}" rx="2.6" ry="4" fill="#fff" opacity=".35"/>`;
   }
   const svg=$('innSvg');
-  svg.setAttribute('viewBox',`0 0 ${w} ${h}`); svg.innerHTML=s;
+  // 建物そのものは、間取り・飾り・大きさが変わったときだけ描き直す
+  const key=s.length+'|'+w+'x'+h;
+  if(svg._k!==key||svg._s!==s){ svg.setAttribute('viewBox',`0 0 ${w} ${h}`); svg.innerHTML=s+'<g class="innd"></g>'; svg._k=key; svg._s=s; svg._dyn=svg.lastChild; svg._d=null }
+  if(svg._d!==d){ svg._dyn.innerHTML=d; svg._d=d }
 }
 
 /* ================= お客 ================= */
@@ -2309,7 +2327,7 @@ function guestArt(s,docked){
   return a+`${s.tag&&docked?`<use href="#t-${s.tag}" x="-3" y="-2" width="${docked?19:23}" height="${docked?19:23}"/>`:''}${s.trait&&docked?`<use href="#tr-${s.trait}" x="-3" y="40" width="16" height="16"/>`:''}${s.disg?`<use href="#leaf" x="24" y="${s.type==='s'?10:-3}" width="18" height="18"/><ellipse cx="32" cy="60.5" rx="21" ry="3.8" fill="none" stroke="#fff" stroke-width="1.2" stroke-dasharray="3 3"/>`:''}<use class="angerm" href="#anger" x="23" y="-7" width="17" height="17"/>`;
 }
 const els=new Map();
-function setPos(o,x,y){o.x=x;o.y=y;o.el.style.transform=`translate(${x-o.w/2}px,${y-o.h/2}px)`}
+function setPos(o,x,y){const t=`translate(${x-o.w/2}px,${y-o.h/2}px)`;o.x=x;o.y=y;if(o.tf!==t){o.tf=t;o.el.style.transform=t}}
 function place(s,docked,x,y,present,mix){
   present.add(s.id);
   let o=els.get(s.id);
@@ -2321,11 +2339,14 @@ function place(s,docked,x,y,present,mix){
     guestsEl.appendChild(el); els.set(s.id,o);
     setPos(o,docked?((s.side||s.f)==='A'?-W:L.w+W):L.w+W,y); el.getBoundingClientRect(); // 待合へは右から入ってくる
   }
-  o.w=W;o.h=H;o.el.style.width=W+'px'; o.el.style.height=docked?'':H+'px'; if(!docked){o.el.style.setProperty('--qa',L.qW+'px');o.el.style.setProperty('--bs',Math.max(14,Math.min(22,Math.floor((L.rowH-31)/2)))+'px')}
-  const full=!docked&&!freeRoom(), ri=docked?roomOf(s.id):-1, n=docked?runLen(ri):0;
-  const inFight=docked&&fightPairs().some(([a,b])=>a===ri||b===ri);
-  o.el.className=`guest ${s.f} sp-${look(s)} ${s.type==='v'?'vip':''} ${docked?'docked':'queued'} ${full?'full':''} ${inFight?'kickable':''} ${S.sel===s.id?'sel':''} ${n>=3?'ch3':n===2?'ch2':''} ${press&&press.drag&&press.id===s.id?'lifted':''} ${s.disg&&s.dT!=null&&s.dT<MELT_WARN?'melt':''}`;
-  o.el.setAttribute('aria-label',`${AN[s.f]}の${TYPES[s.type].name}${s.tag?'・湯札'+TAGN[s.tag]:''}`+(s.disg?`（${AN[look(s)]}に化けている）`:'')+(docked?'（タップで移動）':'（タップで案内）'));
+  o.w=W;o.h=H; const sz=W+'|'+(docked?'':H)+'|'+(docked?'':L.qW+'|'+L.rowH);
+  // 大きさは変わったときだけ書きかえる（毎回書くと画面全体の計算がやり直しになる）
+  if(o.sz!==sz){o.sz=sz; o.el.style.width=W+'px'; o.el.style.height=docked?'':H+'px'; if(!docked){o.el.style.setProperty('--qa',L.qW+'px');o.el.style.setProperty('--bs',Math.max(14,Math.min(22,Math.floor((L.rowH-31)/2)))+'px')}}
+  const ri=docked?roomOf(s.id):-1, full=!docked&&SG.full, n=docked?runLen(ri):0;
+  const inFight=docked&&SG.fr.has(ri);
+  const cn=`guest ${s.f} sp-${look(s)} ${s.type==='v'?'vip':''} ${docked?'docked':'queued'} ${full?'full':''} ${inFight?'kickable':''} ${S.sel===s.id?'sel':''} ${n>=3?'ch3':n===2?'ch2':''} ${press&&press.drag&&press.id===s.id?'lifted':''} ${s.disg&&s.dT!=null&&s.dT<MELT_WARN?'melt':''}`;
+  if(o.cn!==cn){o.cn=cn;o.el.className=cn}
+  const al=`${AN[s.f]}の${TYPES[s.type].name}${s.tag?'・湯札'+TAGN[s.tag]:''}`+(s.disg?`（${AN[look(s)]}に化けている）`:'')+(docked?'（タップで移動）':'（タップで案内）'); if(o.al!==al){o.al=al;o.el.setAttribute('aria-label',al)}
   const st=(docked?'d':'q')+(s.disg?'b':'');
   if(o.state!==st){
     o.state=st;
@@ -2344,12 +2365,13 @@ function place(s,docked,x,y,present,mix){
       o.rq.innerHTML=`<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M8 30 L3 38 L14 33 Z" fill="#fff" stroke="#3a2216" stroke-width="2" stroke-linejoin="round"/><circle cx="20" cy="20" r="17" fill="#fff" stroke="#3a2216" stroke-width="2"/><circle class="rt" cx="20" cy="20" r="14.5" stroke-dasharray="91.1" stroke-dashoffset="0"/><use href="#i-${s.req.k}" x="9" y="9" width="22" height="22"/></svg>`;
       o.rqRing=o.rq.querySelector('.rt');
     }
-    o.rq.style.width=o.rq.style.height=bs+'px';
-    o.rq.style.transform=`translate(${x+L.dW*.3}px,${y-L.dW*.5-bs*.15}px)`;
-  }else if(o.rq){o.rq.remove();o.rq=null;o.rqk=null}
+    const rqt=`translate(${x+L.dW*.3}px,${y-L.dW*.5-bs*.15}px)`; if(o.rqs!==bs){o.rqs=bs;o.rq.style.width=o.rq.style.height=bs+'px'} if(o.rqt!==rqt){o.rqt=rqt;o.rq.style.transform=rqt}
+  }else if(o.rq){o.rq.remove();o.rq=null;o.rqk=null;o.rqs=o.rqt=null}
 }
+const SG={full:false,fr:new Set()};
 function syncGuests(mix){
   const present=new Set();
+  SG.full=!freeRoom(); SG.fr=new Set(); for(const [a,b] of fightPairs()){SG.fr.add(a);SG.fr.add(b)}
   for(const f of ['A','B']) S.q[f].forEach((s,i)=>{const p=L.qp(f,i);place(s,false,p.x,p.y,present,mix)});
   S.room.forEach((s,i)=>{if(s){const c=L.cell(i);place(s,true,c.x,c.y-2,present,mix)}});
   for(const [id,o] of els){
@@ -3497,6 +3519,7 @@ function coachCheck(now){
   if(!S||S.scene!=='play'||S.cd>0||S.paused||S.coach||S.tut||S.sel!=null||(press&&press.drag)||S.day>=100) return; // 特別な面ではガイドを出さない
   if(now-coachT<400||now<coachGap) return; coachT=now;
   SV.coach=SV.coach||[];
+  if(COACH.every(c=>SV.coach.includes(c.k))) return; // 全部見たら位置を測らない（毎回の再計算を省く）
   const sr=stage.getBoundingClientRect();
   for(const c of COACH){
     if(SV.coach.includes(c.k)) continue;
